@@ -14,12 +14,42 @@ export default function Header() {
 
             {/* 네비게이션 */}
             <nav className="flex gap-5 md:gap-8 text-sm md:text-base text-gray-700">
-                <Link to="/" className="hover:text-blue-600 transition">회사 소개</Link>
-                <Link to="/education" className="hover:text-blue-600 transition">교육 프로그램</Link>
-                <Link to="#" className="hover:text-blue-600 transition">플랫폼 개발</Link>
-                <Link to="#" className="hover:text-blue-600 transition">사진</Link>
-                <Link to="#" className="hover:text-blue-600 transition">문의/견적</Link>
-                <Link to="#" className="hover:text-blue-600 transition">관리자 기능</Link>
+                <Link
+                    to="/"
+                    className="cursor-pointer hover:text-blue-600 transition"
+                >
+                    회사 소개
+                </Link>
+                <Link
+                    to="/education"
+                    className="cursor-pointer hover:text-blue-600 transition"
+                >
+                    교육 프로그램
+                </Link>
+                <Link
+                    to="#"
+                    className="cursor-pointer hover:text-blue-600 transition"
+                >
+                    플랫폼 개발
+                </Link>
+                <Link
+                    to="/photos"
+                    className="cursor-pointer hover:text-blue-600 transition"
+                >
+                    사진
+                </Link>
+                <Link
+                    to="#"
+                    className="cursor-pointer hover:text-blue-600 transition"
+                >
+                    문의/견적
+                </Link>
+                <Link
+                    to="#"
+                    className="cursor-pointer hover:text-blue-600 transition"
+                >
+                    관리자 기능
+                </Link>
             </nav>
         </header>
     );

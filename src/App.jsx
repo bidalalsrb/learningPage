@@ -2,6 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import EducationPage from "./pages/EducationPage";
+import PhotoPage from "./pages/PhotoPage.jsx";
+import PhotoDetail from "./components/PhotoDetail.jsx";
 
 function App() {
     return (
@@ -9,6 +11,8 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/education" element={<EducationPage />} />
+                <Route path="/photos" element={<PhotoPage />} /> {/* 새로운 라우트 */}
+                <Route path="/photos/:id" element={<PhotoDetail />} /> {/* ✅ 상세 */}
             </Routes>
         </Router>
     );
