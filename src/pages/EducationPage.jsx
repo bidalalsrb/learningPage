@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import EducationTabs from "../components/EducationTabs";
 import EducationHero from "../components/EducationHero";
 import EducationPrograms from "../components/EducationPrograms";
+import Breadcrumb from "../components/Breadcrumb.jsx";
 
 export default function EducationPage() {
     return (
@@ -15,7 +16,12 @@ export default function EducationPage() {
                 <h1 className="text-3xl font-bold">교육 프로그램</h1>
             </section>
 
-            <EducationTabs />
+            <Breadcrumb
+                items={[
+                    { label: "홈", to: "/" },
+                    { label: "교육 프로그램" }, // 현재 페이지 → 링크 없음
+                ]}
+            />
             <EducationHero />
             <EducationPrograms />
 

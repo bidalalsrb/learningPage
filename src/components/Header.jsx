@@ -39,7 +39,7 @@ export default function Header() {
                     사진
                 </Link>
                 <Link
-                    to="#"
+                    to="/inquiry"
                     className="cursor-pointer hover:text-blue-600 transition"
                 >
                     문의/견적
