@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Header() {
     return (
@@ -10,12 +11,12 @@ export default function Header() {
             </div>
 
             <nav className="flex gap-6 text-sm text-gray-700">
-                <a href="#">회사 소개</a>
-                <a href="#">교육 프로그램</a>
-                <a href="#">플랫폼 개발</a>
-                <a href="#">사진</a>
-                <a href="#">문의/견적</a>
-                <a href="#">관리자 기능</a>
+                <Link to="/">회사 소개</Link>
+                <Link to="/education">교육 프로그램</Link>
+                <Link to="#">플랫폼 개발</Link>
+                <Link to="#">사진</Link>
+                <Link to="#">문의/견적</Link>
+                <Link to="#">관리자 기능</Link>
             </nav>
         </header>
     );
