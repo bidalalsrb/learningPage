@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+.perspective {
+    perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+    transform-style: preserve-3d;
+}
+
+.backface-hidden {
+    backface-visibility: hidden;
+}
+
+/* X축 기준으로 반대로 뒤집기 */
+.rotate-x-180 {
+    transform: rotateX(180deg);
+}
