@@ -1,7 +1,6 @@
 import React from "react";
 import Modal from "react-modal";
 
-// React-Modal 설정
 Modal.setAppElement("#root");
 
 export default function ModalCard({ isOpen, onClose, title, description, image, link }) {
@@ -10,14 +9,14 @@ export default function ModalCard({ isOpen, onClose, title, description, image, 
             isOpen={isOpen}
             onRequestClose={onClose}
             overlayClassName="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-            className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 outline-none animate-fade-in"
+            className="bg-white rounded-xl shadow-xl w-full max-w-md p-6 outline-none"
         >
-            {/* 제목 */}
+            {/* 헤더 */}
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold">{title}</h2>
                 <button
                     onClick={onClose}
-                    className="text-gray-500 hover:text-black text-lg"
+                    className="text-gray-400 hover:text-gray-600 text-lg"
                 >
                     ✕
                 </button>
@@ -28,14 +27,14 @@ export default function ModalCard({ isOpen, onClose, title, description, image, 
                 <img
                     src={image}
                     alt={title}
-                    className="w-full h-48 object-cover rounded mb-4"
+                    className="w-full h-48 object-cover rounded-md mb-4"
                 />
             )}
 
             {/* 설명 */}
-            <p className="text-gray-600 mb-4">{description}</p>
+            <p className="text-gray-600 mb-6">{description}</p>
 
-            {/* 링크 */}
+            {/* 링크 버튼 */}
             {link && (
                 <a
                     href={link}

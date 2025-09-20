@@ -19,28 +19,35 @@ export default function NoticeSlider() {
     ];
 
     return (
-        <section className="px-8 py-12 bg-gray-50">
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold">Notice</h2>
-                <a href="#" className="text-sm text-gray-600">
+        <section className="px-6 md:px-12 py-16 bg-gray-50">
+            {/* 제목 */}
+            <div className="flex justify-between items-center mb-8">
+                <h2 className="text-2xl font-bold text-gray-900">사진</h2>
+                <a href="#" className="text-sm text-blue-600 hover:underline">
                     More View +
                 </a>
             </div>
 
+            {/* 슬라이더 */}
             <Swiper
                 modules={[Navigation, Autoplay]}
                 navigation
-                autoplay={{ delay: 2000, disableOnInteraction: false }}
-                spaceBetween={20}
-                slidesPerView={4}
+                autoplay={{ delay: 3000, disableOnInteraction: false }}
+                spaceBetween={24}
+                slidesPerView={1}
+                breakpoints={{
+                    1024: { slidesPerView: 4 }, // 데스크탑
+                }}
                 className="pb-10"
             >
                 {notices.map((notice, idx) => (
                     <SwiperSlide key={idx}>
-                        <div className="bg-white p-4 shadow rounded h-40">
-                            <h3 className="font-semibold mb-2">{notice.title}</h3>
-                            <p className="text-sm text-gray-600">{notice.desc}</p>
-                            <p className="text-xs text-gray-400 mt-2">{notice.date}</p>
+                        <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition p-5 h-44 flex flex-col justify-between">
+                            <div>
+                                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{notice.title}</h3>
+                                <p className="text-sm text-gray-600 line-clamp-2">{notice.desc}</p>
+                            </div>
+                            <p className="text-xs text-gray-400 mt-3">{notice.date}</p>
                         </div>
                     </SwiperSlide>
                 ))}

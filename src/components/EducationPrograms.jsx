@@ -154,22 +154,29 @@ export default function EducationPrograms() {
 
     return (
         <section className="max-w-7xl mx-auto px-6 py-12 flex-1">
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">교육 프로그램</h2>
-                <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+            {/* 헤더 */}
+            <div className="flex justify-between items-center mb-10">
+                <h2 className="text-2xl font-bold">교육 프로그램 카테고리</h2>
+                <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                     교육문의
                 </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-sm">
+            {/* 카드 레이아웃 */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {categories.map((cat, idx) => (
-                    <div key={idx}>
-                        <h3 className="font-semibold text-lg mb-3">{cat.title}</h3>
-                        <ul className="space-y-2">
+                    <div
+                        key={idx}
+                        className="bg-white rounded-lg shadow hover:shadow-md transition p-6"
+                    >
+                        <h3 className="text-lg font-semibold mb-4 text-gray-800">
+                            {cat.title}
+                        </h3>
+                        <ul className="space-y-3">
                             {cat.items.map((item, i) => (
                                 <li
                                     key={i}
-                                    className="cursor-pointer hover:text-blue-600"
+                                    className="cursor-pointer p-3 rounded hover:bg-gray-50 transition"
                                     onClick={() =>
                                         setSelectedItem({
                                             title: item.name,
@@ -179,7 +186,8 @@ export default function EducationPrograms() {
                                         })
                                     }
                                 >
-                                    {item.name}
+                                    <p className="font-medium text-gray-700">{item.name}</p>
+                                    <p className="text-xs text-gray-500">{item.desc}</p>
                                 </li>
                             ))}
                         </ul>
