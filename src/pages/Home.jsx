@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import NoticeSlider from "../components/NoticeSlider";
@@ -7,7 +8,6 @@ import FeatureBoxes from "../components/FeatureBoxes";
 export default function Home() {
     return (
         <div className="min-h-screen flex flex-col bg-white">
-            {/* 상단 네비 */}
             <Header />
 
             {/* Hero Section */}
@@ -21,35 +21,30 @@ export default function Home() {
                     기업과 개인 모두의 성장을 지원합니다.
                 </p>
                 <div className="mt-10 flex justify-center gap-4">
-                    <a
-                        href="/education"
+                    <Link
+                        to="/education"
                         className="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 transition"
                     >
                         교육 프로그램 보기
-                    </a>
-                    <a
-                        href="/inquiry"
+                    </Link>
+                    <Link
+                        to="/inquiry"
                         className="px-8 py-3 rounded-lg font-medium border border-gray-300 hover:bg-gray-50 transition"
                     >
                         문의하기
-                    </a>
+                    </Link>
                 </div>
             </section>
 
-            {/* FeatureBoxes (카드 형태) */}
             <section className="px-6 md:px-12 py-20">
                 <h2 className="text-2xl font-bold text-center mb-12">주요 서비스</h2>
                 <FeatureBoxes />
             </section>
 
-            {/* Notice Slider */}
             <section className="px-6 md:px-12 py-20">
                 <NoticeSlider />
             </section>
 
-
-
-            {/* 하단 푸터 */}
             <Footer />
         </div>
     );

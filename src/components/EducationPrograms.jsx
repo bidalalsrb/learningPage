@@ -157,9 +157,9 @@ export default function EducationPrograms() {
             {/* 헤더 */}
             <div className="flex justify-between items-center mb-10">
                 <h2 className="text-2xl font-bold">교육 프로그램 카테고리</h2>
-                <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                    교육문의
-                </button>
+                {/*<button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">*/}
+                {/*    교육문의*/}
+                {/*</button>*/}
             </div>
 
             {/* 카드 레이아웃 */}
