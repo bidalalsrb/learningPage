@@ -1,24 +1,29 @@
 import React, { useState } from "react";
-import { FaBookOpen, FaLaptopCode, FaEnvelopeOpenText } from "react-icons/fa"; // 아이콘 불러오기
+import { FaBookOpen, FaLaptopCode, FaEnvelopeOpenText } from "react-icons/fa";
+import { useNavigate } from "react-router-dom"; // ✅ 페이지 이동용 훅
 
 export default function FeatureBoxes() {
     const [active, setActive] = useState(null);
+    const navigate = useNavigate();
 
     const features = [
         {
             title: "교육 프로그램",
             desc: "진로·취업·창업을 위한 맞춤형 교육 과정",
             icon: <FaBookOpen className="w-16 h-16 text-blue-600" />,
+            link: "/education", // ✅ 이동할 경로
         },
         {
             title: "솔루션 개발",
             desc: "기업과 조직을 위한 효율적인 교육 플랫폼",
             icon: <FaLaptopCode className="w-16 h-16 text-green-600" />,
+            link: "/solution", // ✅ 추후 페이지 생성 시 이동
         },
         {
             title: "문의 / 견적",
             desc: "기업 및 개인 맞춤형 상담과 견적 제공",
             icon: <FaEnvelopeOpenText className="w-16 h-16 text-red-500" />,
+            link: "/inquiry", // ✅ 문의 페이지
         },
     ];
 
@@ -47,12 +52,12 @@ export default function FeatureBoxes() {
                     >
                         <h3 className="text-gray-900 text-xl font-bold mb-2">{f.title}</h3>
                         <p className="text-gray-600 text-sm mb-4">{f.desc}</p>
-                        <a
-                            href="#"
+                        <button
+                            onClick={() => navigate(f.link)} // ✅ 해당 페이지로 이동
                             className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
                         >
                             바로가기
-                        </a>
+                        </button>
                     </div>
                 </div>
             ))}

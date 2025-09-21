@@ -11,13 +11,13 @@ export default function EducationPrograms() {
                 {
                     name: "진로·학업적성검사(중/고/대학생)",
                     desc: "학생들의 학업 성향과 적성을 종합적으로 분석합니다.",
-                    img: "/images/career1.jpg",
+                    img: "/educ1_1.jpg",
                     link: "https://example.com/career1",
                 },
                 {
                     name: "진로탐색과 Quantum진단(청소년/대학생)",
                     desc: "진로 탐색을 돕는 첨단 진단 프로그램.",
-                    img: "/images/career2.jpg",
+                    img: "/educ1_2.jpg",
                     link: "https://example.com/career2",
                 },
                 {
@@ -46,13 +46,13 @@ export default function EducationPrograms() {
                 {
                     name: "취업 로드맵",
                     desc: "대학생 및 일반인을 위한 맞춤형 취업 전략.",
-                    img: "/images/job1.jpg",
+                    img: "/educ1_1.jpg",
                     link: "https://example.com/job1",
                 },
                 {
                     name: "자기소개서 / 이력서 컨설팅",
                     desc: "전문가의 피드백으로 문서 완성도를 높입니다.",
-                    img: "/images/job2.jpg",
+                    img: "/educ1_2.jpg",
                     link: "https://example.com/job2",
                 },
                 {
@@ -81,13 +81,13 @@ export default function EducationPrograms() {
                 {
                     name: "창업기초과정",
                     desc: "처음 창업을 준비하는 사람을 위한 기초 교육.",
-                    img: "/images/startup1.jpg",
+                    img: "/educ8_1.jpg",
                     link: "https://example.com/startup1",
                 },
                 {
                     name: "창업 아이디어 발굴",
                     desc: "창업 아이디어를 구체화하는 워크숍.",
-                    img: "/images/startup2.jpg",
+                    img: "/educ8_2.jpg",
                     link: "https://example.com/startup2",
                 },
                 {
@@ -202,7 +202,7 @@ export default function EducationPrograms() {
                 title={selectedItem?.title}
                 description={selectedItem?.description}
                 image={selectedItem?.image}
-                link={selectedItem?.link}
+                link={'/inquiry'}
             />
         </section>
     );

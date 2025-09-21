@@ -42,7 +42,7 @@ export default function ModalCard({ isOpen, onClose, title, description, image, 
                     rel="noopener noreferrer"
                     className="block text-center bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
                 >
-                    자세히 보기
+                    문의하기
                 </a>
             )}
         </Modal>

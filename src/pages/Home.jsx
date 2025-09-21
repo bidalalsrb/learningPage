@@ -37,7 +37,7 @@ export default function Home() {
             </section>
 
             {/* FeatureBoxes (카드 형태) */}
-            <section className="px-6 md:px-12 py-20 bg-gray-50">
+            <section className="px-6 md:px-12 py-20">
                 <h2 className="text-2xl font-bold text-center mb-12">주요 서비스</h2>
                 <FeatureBoxes />
             </section>

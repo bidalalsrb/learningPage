@@ -7,7 +7,7 @@ const photos = [
         author: "관리자",
         date: "2024-01-15",
         views: 245,
-        img: "/images/photo1.jpg",
+        img: "/educ1_1.jpg",
     },
     {
         id: 2,
@@ -16,7 +16,7 @@ const photos = [
         author: "디자인팀",
         date: "2024-01-14",
         views: 189,
-        img: "/images/photo2.jpg",
+        img: "/educ1_2.jpg",
     },
     {
         id: 3,
@@ -25,7 +25,7 @@ const photos = [
         author: "개발팀",
         date: "2024-01-13",
         views: 156,
-        img: "/images/photo3.jpg",
+        img: "/educ8_1.jpg",
     },
     {
         id: 4,
@@ -34,7 +34,7 @@ const photos = [
         author: "마케팅팀",
         date: "2024-01-12",
         views: 200,
-        img: "/images/photo4.jpg",
+        img: "/eduu3_1.jpg",
     },
     {
         id: 5,
@@ -43,7 +43,7 @@ const photos = [
         author: "UX팀",
         date: "2024-01-11",
         views: 178,
-        img: "/images/photo5.jpg",
+        img: "/eduu3_2.jpg",
     },
     {
         id: 6,

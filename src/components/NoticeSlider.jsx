@@ -1,57 +1,101 @@
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Autoplay } from "swiper/modules";
+import { useNavigate } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/navigation";
 
+import photos from "../data/photos";
+
 export default function NoticeSlider() {
-    const notices = [
-        { title: "10월30일~10월31일 MMPI 검사", desc: "다면적 인성검사 안내합니다...", date: "2025-09-12" },
-        { title: "10월11일 자기돌봄 세션", desc: "사람과 마음 연구소에서 준비했습니다...", date: "2025-09-11" },
-        { title: "9월25일 질환관리 워크샵", desc: "심리연구소에서 워크샵을 개최합니다...", date: "2025-09-10" },
-        { title: "9월15일 스트레스 관리 특강", desc: "직장인을 위한 스트레스 관리 특강 안내...", date: "2025-09-08" },
-        { title: "9월01일 조직관리 세미나", desc: "효율적인 조직 운영을 위한 세미나...", date: "2025-09-01" },
-        { title: "8월28일 리더십 워크샵", desc: "리더십 개발을 위한 집중 교육...", date: "2025-08-28" },
-        { title: "8월20일 팀빌딩 캠프", desc: "팀워크 강화를 위한 야외 캠프...", date: "2025-08-20" },
-        { title: "8월10일 심리 상담 특강", desc: "심리적 안정과 성장을 위한 강의...", date: "2025-08-10" },
-        { title: "7월30일 인재개발 포럼", desc: "최신 HRD 트렌드 공유...", date: "2025-07-30" },
-        { title: "7월15일 스트레스 해소법", desc: "현대인을 위한 스트레스 해소 특강...", date: "2025-07-15" },
-    ];
+    const prevRef = useRef(null);
+    const nextRef = useRef(null);
+    const [swiperInstance, setSwiperInstance] = useState(null);
+    const navigate = useNavigate();
+
+    // ✅ Swiper 초기화 후 버튼 연결
+    useEffect(() => {
+        if (swiperInstance && prevRef.current && nextRef.current) {
+            swiperInstance.params.navigation.prevEl = prevRef.current;
+            swiperInstance.params.navigation.nextEl = nextRef.current;
+            swiperInstance.navigation.init();
+            swiperInstance.navigation.update();
+        }
+    }, [swiperInstance]);
 
     return (
-        <section className="px-6 md:px-12 py-16 bg-gray-50">
+        <section className="px-6 md:px-12 py-16">
             {/* 제목 */}
             <div className="flex justify-between items-center mb-8">
                 <h2 className="text-2xl font-bold text-gray-900">사진</h2>
-                <a href="#" className="text-sm text-blue-600 hover:underline">
+                <a href="/photos" className="text-sm text-blue-600 hover:underline">
                     More View +
                 </a>
             </div>
 
-            {/* 슬라이더 */}
-            <Swiper
-                modules={[Navigation, Autoplay]}
-                navigation
-                autoplay={{ delay: 3000, disableOnInteraction: false }}
-                spaceBetween={24}
-                slidesPerView={1}
-                breakpoints={{
-                    1024: { slidesPerView: 4 }, // 데스크탑
-                }}
-                className="pb-10"
-            >
-                {notices.map((notice, idx) => (
-                    <SwiperSlide key={idx}>
-                        <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition p-5 h-44 flex flex-col justify-between">
-                            <div>
-                                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{notice.title}</h3>
-                                <p className="text-sm text-gray-600 line-clamp-2">{notice.desc}</p>
+            {/* 버튼 + 슬라이더 묶음 */}
+            <div className="relative flex items-center gap-4">
+                {/* 왼쪽 버튼 */}
+                <button
+                    ref={prevRef}
+                    className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full shadow hover:bg-gray-200"
+                >
+                    &lt;
+                </button>
+
+                {/* 슬라이더 */}
+                <Swiper
+                    modules={[Navigation, Autoplay]}
+                    onSwiper={setSwiperInstance} // ✅ Swiper 인스턴스 저장
+                    autoplay={{ delay: 3000, disableOnInteraction: false }}
+                    spaceBetween={24}
+                    slidesPerView={1}
+                    breakpoints={{
+                        1024: { slidesPerView: 4 },
+                        768: { slidesPerView: 2 },
+                    }}
+                    className="flex-1"
+                >
+                    {photos.map((photo) => (
+                        <SwiperSlide key={photo.id}>
+                            <div
+                                className="bg-white rounded-xl shadow-sm hover:shadow-md transition overflow-hidden flex flex-col h-64 cursor-pointer"
+                                onClick={() => navigate(`/photos/${photo.id}`)} // ✅ 상세 이동
+                            >
+                                {/* 이미지 */}
+                                {photo.img && (
+                                    <img
+                                        src={photo.img}
+                                        alt={photo.title}
+                                        className="w-full h-32 object-cover"
+                                    />
+                                )}
+
+                                {/* 내용 */}
+                                <div className="p-4 flex flex-col justify-between flex-1">
+                                    <div>
+                                        <h3 className="font-semibold text-gray-900 line-clamp-1">
+                                            {photo.title}
+                                        </h3>
+                                        <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                                            {photo.desc}
+                                        </p>
+                                    </div>
+                                    <p className="text-xs text-gray-400 mt-3">{photo.date}</p>
+                                </div>
                             </div>
-                            <p className="text-xs text-gray-400 mt-3">{notice.date}</p>
-                        </div>
-                    </SwiperSlide>
-                ))}
-            </Swiper>
+                        </SwiperSlide>
+                    ))}
+                </Swiper>
+
+                {/* 오른쪽 버튼 */}
+                <button
+                    ref={nextRef}
+                    className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full shadow hover:bg-gray-200"
+                >
+                    &gt;
+                </button>
+            </div>
         </section>
     );
 }
