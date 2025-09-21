@@ -28,7 +28,7 @@ export default function Home() {
                         교육 프로그램 보기
                     </a>
                     <a
-                        href="#contact"
+                        href="/inquiry"
                         className="px-8 py-3 rounded-lg font-medium border border-gray-300 hover:bg-gray-50 transition"
                     >
                         문의하기
