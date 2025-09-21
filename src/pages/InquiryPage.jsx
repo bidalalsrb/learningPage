@@ -17,7 +17,7 @@ export default function InquiryPage() {
         date: `2025-09-${String((i % 30) + 1).padStart(2, "0")}`,
     }));
 
-    const itemsPerPage = 7;
+    const itemsPerPage = 10;
     const [currentPage, setCurrentPage] = useState(1);
 
     const startIdx = (currentPage - 1) * itemsPerPage;

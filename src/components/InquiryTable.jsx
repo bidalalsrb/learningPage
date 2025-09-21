@@ -22,7 +22,14 @@ export default function InquiryTable({ inquiries, onRowClick }) {
             </div>
 
             {/* 테이블 */}
-            <table className="w-full text-sm text-gray-700">
+            <table className="w-full text-sm text-gray-700 border-t">
+                <thead className="bg-gray-50 border-b text-gray-600">
+                <tr>
+                    <th className="w-16 py-3 text-center">번호</th>
+                    <th className="py-3 text-left">제목</th>
+                    <th className="w-32 py-3 text-center">작성일</th>
+                </tr>
+                </thead>
                 <tbody>
                 {inquiries.map((item) => (
                     <tr
