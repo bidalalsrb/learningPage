@@ -6,10 +6,10 @@ export default function Header() {
         <header className="flex justify-between items-center px-6 md:px-12 py-5 shadow-sm bg-white">
             {/* 로고 + 회사명 */}
             <div className="flex items-center gap-3 cursor-pointer">
-                <img src="/img.png" alt="회사 로고" className="h-10 md:h-12 w-auto" />
-                <span className="text-blue-600 font-bold text-xl md:text-2xl">
-          HRnC 교육컨설팅
-        </span>
+                <img src="/iconimg.png" alt="회사 로고" className="h-10 md:h-12 w-auto" />
+                {/*<span className="text-blue-600 font-bold text-xl md:text-2xl">*/}
+          {/*HRnC 교육컨설팅*/}
+        {/*</span>*/}
             </div>
 
             {/* 네비게이션 */}
@@ -30,7 +30,7 @@ export default function Header() {
                     to="#"
                     className="cursor-pointer hover:text-blue-600 transition"
                 >
-                    플랫폼 개발
+                    스트레스 관리
                 </Link>
                 <Link
                     to="/photos"
@@ -42,7 +42,7 @@ export default function Header() {
                     to="/inquiry"
                     className="cursor-pointer hover:text-blue-600 transition"
                 >
-                    문의/견적
+                    문의
                 </Link>
                 <Link
                     to="#"
