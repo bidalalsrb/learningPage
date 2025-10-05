@@ -6,15 +6,21 @@ import PhotoPage from "./pages/PhotoPage.jsx";
 import PhotoDetail from "./components/PhotoDetail.jsx";
 import InquiryPage from "./pages/InquiryPage.jsx";
 import InquiryDetail from "./components/InquiryDetail.jsx";
+import CompanyPage from "./pages/CompanyPage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import StressPage from "./pages/StressPage.jsx";
 
 function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/index" element={<Home />} />
+                <Route path="/admin/login" element={<LoginPage />} />
+                <Route path="/company" element={<CompanyPage />} />
                 <Route path="/education" element={<EducationPage />} />
-                <Route path="/photos" element={<PhotoPage />} /> {/* 새로운 라우트 */}
-                <Route path="/photos/:id" element={<PhotoDetail />} /> {/* ✅ 상세 */}
+                <Route path="/stress" element={<StressPage />} />
+                <Route path="/photos" element={<PhotoPage />} />
+                <Route path="/photos/:id" element={<PhotoDetail />} />
                 <Route path="/inquiry" element={<InquiryPage />}/>
                 <Route path="/inquiry/:id" element={<InquiryDetail />} />
             </Routes>

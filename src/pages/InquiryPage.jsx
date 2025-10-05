@@ -34,15 +34,15 @@ export default function InquiryPage() {
             <Header />
 
             {/* 타이틀 */}
-            <section className="px-6 md:px-12 py-10 border-b text-center bg-white">
-                <h1 className="text-2xl font-bold text-gray-900">문의 / 견적</h1>
+            <section className="text-center py-10 border-b">
+                <h1 className="text-3xl font-bold">문의</h1>
             </section>
 
             {/* Breadcrumb */}
             <Breadcrumb
                 items={[
-                    { label: "홈", to: "/" },
-                    { label: "문의 / 견적" },
+                    { label: "홈", to: "/index" },
+                    { label: "문의" },
                 ]}
             />
 
