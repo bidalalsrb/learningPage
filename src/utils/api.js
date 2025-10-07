@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: "http://localhost:8080/", // Spring Boot 서버 주소
+    baseURL: "http://3.37.89.229:8080/",
+    // baseURL: "http://localhost:8080/",
 });
 
 // 요청 인터셉터 (JWT 토큰 자동 추가)

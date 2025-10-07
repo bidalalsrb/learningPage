@@ -1,5 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 const getPortalTarget = () =>
     typeof document !== "undefined" ? document.body : null;
@@ -12,6 +17,32 @@ const resolveImageSrc = (image) => {
 
 export default function ProgramDetailModal({ isOpen, item, onClose }) {
     const portalTarget = getPortalTarget();
+    const [swiperInstance, setSwiperInstance] = useState(null);
+    const hasContent = Boolean(isOpen && item && portalTarget);
+    const title = item?.title;
+    const description = item?.description;
+    const imageList = useMemo(
+        () =>
+            Array.isArray(item?.images)
+                ? item.images.filter(Boolean)
+                : [],
+        [item]
+    );
+    const resolvedImages = useMemo(
+        () =>
+            imageList
+                .map((image, index) => {
+                    const src = resolveImageSrc(image);
+                    if (!src) return null;
+                    return {
+                        id: image.id || `${title}-image-${index}`,
+                        src,
+                        alt: image.alt || image.originalFilename || title || "교육 이미지",
+                    };
+                })
+                .filter(Boolean),
+        [imageList, title]
+    );
 
     useEffect(() => {
         if (!isOpen) return;
@@ -24,17 +55,22 @@ export default function ProgramDetailModal({ isOpen, item, onClose }) {
         return () => document.removeEventListener("keydown", handleKeyDown);
     }, [isOpen, onClose]);
 
-    if (!isOpen || !item || !portalTarget) {
+    if (!hasContent) {
         return null;
     }
-
-    const { title, description, images = [] } = item;
-    const imageList = Array.isArray(images) ? images.filter(Boolean) : [];
 
     const handleOverlayClick = (event) => {
         if (event.target === event.currentTarget) {
             onClose?.();
         }
+    };
+
+    const handlePrevSlide = () => {
+        swiperInstance?.slidePrev();
+    };
+
+    const handleNextSlide = () => {
+        swiperInstance?.slideNext();
     };
 
     return createPortal(
@@ -64,24 +100,47 @@ export default function ProgramDetailModal({ isOpen, item, onClose }) {
                     {description}
                 </p>
 
-                {imageList.length > 0 && (
-                    <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3">
-                        {imageList.map((image, index) => {
-                            const src = resolveImageSrc(image);
-                            if (!src) return null;
-                            return (
-                                <div
-                                    key={image.id || `${title}-image-${index}`}
-                                    className="overflow-hidden rounded-2xl border border-[var(--toss-border)] bg-white"
-                                >
+                {resolvedImages.length > 0 && (
+                    <div className="relative mt-6">
+                        <Swiper
+                            modules={[Navigation, Pagination]}
+                            slidesPerView={1}
+                            spaceBetween={16}
+                            pagination={{ clickable: true }}
+                            className="overflow-hidden rounded-2xl border border-[var(--toss-border)]"
+                            onSwiper={setSwiperInstance}
+                        >
+                            {resolvedImages.map((image) => (
+                                <SwiperSlide key={image.id}>
                                     <img
-                                        src={src}
-                                        alt={title}
-                                        className="h-36 w-full object-cover"
+                                        src={image.src}
+                                        alt={image.alt}
+                                        className="h-80 w-full object-cover"
                                     />
-                                </div>
-                            );
-                        })}
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+
+                        {resolvedImages.length > 1 && (
+                            <>
+                                <button
+                                    type="button"
+                                    className="absolute left-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--toss-border)] bg-white/90 text-lg text-[var(--toss-text-medium)] shadow transition hover:border-[var(--toss-border-strong)] hover:text-[var(--toss-primary)]"
+                                    aria-label="이전 이미지"
+                                    onClick={handlePrevSlide}
+                                >
+                                    &lsaquo;
+                                </button>
+                                <button
+                                    type="button"
+                                    className="absolute right-3 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--toss-border)] bg-white/90 text-lg text-[var(--toss-text-medium)] shadow transition hover:border-[var(--toss-border-strong)] hover:text-[var(--toss-primary)]"
+                                    aria-label="다음 이미지"
+                                    onClick={handleNextSlide}
+                                >
+                                    &rsaquo;
+                                </button>
+                            </>
+                        )}
                     </div>
                 )}
 
