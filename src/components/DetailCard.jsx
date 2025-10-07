@@ -1,13 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
-import Modal from "react-modal";
-
-Modal.setAppElement("#root");
 
 const normaliseToArray = (value) => {
     if (!value) return [];
     if (Array.isArray(value)) return value.filter(Boolean);
     return [value].filter(Boolean);
 };
+
+const createEmptyForm = () => ({
+    id: null,
+    title: "",
+    description: "",
+    link: "",
+    images: [],
+});
 
 export default function DetailCard({
     isOpen,
@@ -17,12 +22,7 @@ export default function DetailCard({
     onSave,
     onDelete,
 }) {
-    const [form, setForm] = useState({
-        id: null,
-        title: "",
-        description: "",
-        images: [],
-    });
+    const [form, setForm] = useState(createEmptyForm());
     const objectUrlRef = useRef([]);
 
     const clearObjectUrls = () => {
@@ -33,22 +33,14 @@ export default function DetailCard({
     useEffect(() => {
         if (!isOpen) {
             clearObjectUrls();
-            setForm((prev) => ({
-                ...prev,
-                images: [],
-            }));
+            setForm(createEmptyForm());
         }
     }, [isOpen]);
 
     useEffect(() => {
         clearObjectUrls();
         if (!item) {
-            setForm({
-                id: null,
-                title: "",
-                description: "",
-                images: [],
-            });
+            setForm(createEmptyForm());
             return () => clearObjectUrls();
         }
 
@@ -61,6 +53,7 @@ export default function DetailCard({
                         preview: image,
                         file: null,
                         persisted: true,
+                        storedPath: image,
                     };
                 }
                 if (image?.file instanceof File) {
@@ -73,6 +66,7 @@ export default function DetailCard({
                         preview,
                         file: image.file,
                         persisted: Boolean(image.persisted),
+                        storedPath: image.storedPath || null,
                     };
                 }
                 if (image instanceof File) {
@@ -83,6 +77,7 @@ export default function DetailCard({
                         preview,
                         file: image,
                         persisted: false,
+                        storedPath: null,
                     };
                 }
                 if (image?.preview) {
@@ -91,6 +86,7 @@ export default function DetailCard({
                         preview: image.preview,
                         file: image.file || null,
                         persisted: Boolean(image.persisted) || !image.file,
+                        storedPath: image.storedPath || null,
                     };
                 }
                 return null;
@@ -101,6 +97,7 @@ export default function DetailCard({
             id: item.id ?? null,
             title: item.title || "",
             description: item.description || "",
+            link: item.link || "",
             images: hydratedImages,
         });
 
@@ -124,6 +121,7 @@ export default function DetailCard({
                 file,
                 preview,
                 persisted: false,
+                storedPath: null,
             };
         });
 
@@ -160,14 +158,45 @@ export default function DetailCard({
         onDelete?.(form.id);
     };
 
+    useEffect(() => {
+        if (!isOpen) {
+            return undefined;
+        }
+        if (typeof document === "undefined") {
+            return undefined;
+        }
+        const original = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = original;
+        };
+    }, [isOpen]);
+
+    if (!isOpen) {
+        return null;
+    }
+
+    const handleOverlayClick = (e) => {
+        e.stopPropagation();
+        onClose?.();
+    };
+
+    const preventPropagation = (e) => {
+        e.stopPropagation();
+    };
+
     return (
-        <Modal
-            isOpen={isOpen}
-            onRequestClose={onClose}
-            overlayClassName="fixed inset-0 z-50 flex items-center justify-center bg-[#0b1626]/60 px-4"
-            className="surface-card w-full max-w-xl border border-[var(--toss-border-strong)] p-8 outline-none"
+        <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#0b1626]/60 px-4"
+            onClick={handleOverlayClick}
         >
-            <div className="mb-6 flex items-center justify-between">
+            <div
+                className="surface-card w-full max-w-xl border border-[var(--toss-border-strong)] p-8 outline-none"
+                role="dialog"
+                aria-modal="true"
+                onClick={preventPropagation}
+            >
+                <div className="mb-6 flex items-center justify-between">
                 <h2 className="text-2xl font-semibold tracking-tight text-[var(--toss-text-strong)]">
                     {editable ? (form.id ? "내용 수정" : "내용 추가") : form.title}
                 </h2>
@@ -196,6 +225,14 @@ export default function DetailCard({
                         onChange={handleChange}
                         placeholder="내용"
                         className="h-32 w-full rounded-xl border border-[var(--toss-border)] px-4 py-3 text-sm transition focus:border-[var(--toss-primary)] focus:ring-0"
+                    />
+                    <input
+                        type="text"
+                        name="link"
+                        value={form.link}
+                        onChange={handleChange}
+                        placeholder="관련 링크 (선택)"
+                        className="w-full rounded-xl border border-[var(--toss-border)] px-4 py-3 text-sm transition focus:border-[var(--toss-primary)] focus:ring-0"
                     />
                     <div className="space-y-3">
                         <label className="block text-sm font-semibold text-[var(--toss-text-medium)]">
@@ -267,6 +304,19 @@ export default function DetailCard({
                         {form.description}
                     </p>
 
+                    {form.link && (
+                        <div className="mb-6">
+                            <a
+                                href={form.link}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--toss-primary)] underline-offset-4 hover:underline"
+                            >
+                                관련 링크 열기 ↗
+                            </a>
+                        </div>
+                    )}
+
                     {form.images.length > 0 && (
                         <div className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-3">
                             {form.images.map((image) => (
@@ -295,6 +345,7 @@ export default function DetailCard({
                     </div>
                 </>
             )}
-        </Modal>
+            </div>
+        </div>
     );
 }

@@ -151,22 +151,22 @@ export default function PhotoPage() {
                             </div>
                         ) : (
                             <>
-                                <PhotoGrid photos={currentPhotos} itemsPerPage={itemsPerPage} />
-                                {isAdmin && (
-                                    <div className="flex justify-end">
-                                        <Link
-                                            to="/photos/new"
-                                            className="toss-primary-btn h-11 px-6 text-sm"
-                                        >
-                                            사진 등록하기
-                                        </Link>
-                                    </div>
-                                )}
-                                <Pagination
-                                    currentPage={currentPage}
-                                    totalPages={totalPages}
-                                    onPageChange={(page) => setCurrentPage(page)}
-                                />
+                        <PhotoGrid photos={currentPhotos} itemsPerPage={itemsPerPage} />
+                        {isAdmin && (
+                            <div className="flex justify-end">
+                                <Link
+                                    to="/photos/new"
+                                    className="toss-primary-btn h-11 px-6 text-sm"
+                                >
+                                    사진 등록하기
+                                </Link>
+                            </div>
+                        )}
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={(page) => setCurrentPage(page)}
+                        />
                             </>
                         )}
                     </div>
