@@ -47,3 +47,23 @@
 a {
     cursor: pointer;
 }
+
+/* 스크롤바 디자인 (크롬/엣지/사파리) */
+.custom-scrollbar::-webkit-scrollbar {
+    width: 8px; /* 필요하면 다시 켜기 */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #6b7280; /* 파란색 (스크롤만 보이게) */
+    border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent; /* ✅ 밝은 회색 제거 */
+}
+
+/* 파이어폭스 */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #6b7280 transparent; /* ✅ 트랙 투명 */
+}
