@@ -1,29 +1,38 @@
-import React, {useState} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../utils/api.js";
 
-export default function LoginPage() {
+export default function SignupPage() {
     const navigate = useNavigate();
-    const [form, setForm] = useState({username: "", password: ""});
+    const [form, setForm] = useState({ username: "", password: "" });
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const isValid =
         form.username.trim().length >= 3 && form.password.trim().length >= 4;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!isValid) return;
-        const payload = {
-            username: form.username,
-            password: form.password,
-        }
+        if (!isValid || loading) return;
+
+        setLoading(true);
+        setError("");
+
         try {
-            const res = await api.post("/api/auth/login", payload);
-            localStorage.setItem("ACCESS_TOKEN", res.data.accessToken);
-            navigate("/index");
+            await api.post("/api/auth/signup", {
+                username: form.username.trim(),
+                password: form.password.trim(),
+            });
+            alert("회원가입이 완료되었습니다. 로그인해주세요.");
+            navigate("/admin/login");
         } catch (err) {
-            console.error("로그인 실패:", err.response?.data || err.message);
-            setError("아이디 또는 비밀번호가 올바르지 않습니다.");
+            const message =
+                err.response?.data?.message ||
+                err.response?.data ||
+                "회원가입 중 오류가 발생했습니다.";
+            setError(message);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -36,10 +45,10 @@ export default function LoginPage() {
                 <div className="text-center">
                     <span className="toss-tag uppercase">Admin</span>
                     <h1 className="mt-4 text-3xl font-bold tracking-tight text-[var(--toss-text-strong)]">
-                        관리자 로그인
+                        관리자 회원가입
                     </h1>
                     <p className="mt-2 text-sm text-[var(--toss-text-medium)]">
-                        안전한 접근을 위해 계정 정보를 입력해주세요.
+                        간단한 정보만으로 관리 계정을 생성합니다.
                     </p>
                 </div>
 
@@ -79,7 +88,7 @@ export default function LoginPage() {
                                 setForm({ ...form, password: e.target.value })
                             }
                             placeholder="비밀번호를 입력하세요"
-                            autoComplete="current-password"
+                            autoComplete="new-password"
                             className="w-full rounded-2xl border border-[var(--toss-border)] px-4 py-3 text-sm transition focus:border-[var(--toss-primary)] focus:outline-none"
                         />
                     </div>
@@ -90,26 +99,26 @@ export default function LoginPage() {
 
                     <button
                         type="submit"
-                        disabled={!isValid}
+                        disabled={!isValid || loading}
                         className={`h-12 w-full rounded-full text-sm font-semibold transition ${
-                            isValid
+                            isValid && !loading
                                 ? "toss-primary-btn"
                                 : "cursor-not-allowed bg-[rgba(25,31,40,0.08)] text-[var(--toss-text-weak)]"
                         }`}
                     >
-                        로그인
+                        {loading ? "가입 중..." : "회원가입"}
                     </button>
                 </div>
 
-                <p className="mt-6 text-center text-xs text-[var(--toss-text-medium)]">
-                    아직 계정이 없으신가요?{" "}
+                <div className="mt-8 text-center text-xs text-[var(--toss-text-medium)]">
+                    이미 계정이 있으신가요?{" "}
                     <Link
-                        to="/admin/signup"
+                        to="/admin/login"
                         className="font-semibold text-[var(--toss-primary)] underline-offset-4 hover:underline"
                     >
-                        회원가입
+                        로그인하기
                     </Link>
-                </p>
+                </div>
             </form>
         </div>
     );

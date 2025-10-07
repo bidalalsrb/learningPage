@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Header() {
     const navigate = useNavigate();
+
+    const token = typeof window !== "undefined" ? localStorage.getItem("ACCESS_TOKEN") : null;
+    const isAdmin = useMemo(() => Boolean(token), [token]);
 
     const handleHome = () => {
         navigate("/index");
@@ -14,16 +17,14 @@ export default function Header() {
                 <button
                     type="button"
                     onClick={handleHome}
-                    className="flex items-center gap-2 rounded-full border border-transparent px-3 py-1 transition hover:border-[var(--toss-border-strong)]"
+                    className="flex items-center gap-2 rounded-full border border-transparent px-3 py-1 transition "
                 >
                     <img
                         src="/iconimg.png"
                         alt="HRnC 로고"
                         className="h-10 w-auto"
                     />
-                    <span className="hidden text-base font-semibold tracking-tight text-[var(--toss-text-strong)] md:inline">
-                        HRnC 교육컨설팅
-                    </span>
+
                 </button>
 
                 <nav className="hidden items-center gap-7 text-sm font-medium text-[var(--toss-text-medium)] md:flex">
@@ -46,12 +47,11 @@ export default function Header() {
 
                 <div className="flex items-center gap-3">
                     <Link
-                        to="/inquiry"
-                        className="hidden text-sm font-semibold text-[var(--toss-text-medium)] underline-offset-4 hover:text-[var(--toss-primary)] hover:underline md:inline"
+                        to="/admin/login"
+                        className={`h-10 px-5 text-sm font-semibold transition ${
+                            isAdmin ? "toss-primary-btn" : "toss-secondary-btn"
+                        }`}
                     >
-                        상담 예약
-                    </Link>
-                    <Link to="/admin/login" className="toss-secondary-btn h-10 px-5 text-sm font-semibold">
                         관리자
                     </Link>
                 </div>

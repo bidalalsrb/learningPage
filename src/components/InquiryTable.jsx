@@ -1,6 +1,7 @@
 import React from "react";
 
 export default function InquiryTable({ inquiries, onRowClick }) {
+    console.log(inquiries)
     return (
         <div className="space-y-4">
             <div className="flex flex-col gap-3 rounded-3xl border border-[var(--toss-border)] bg-white/70 px-4 py-4 text-sm text-[var(--toss-text-medium)] md:flex-row md:items-center md:justify-between">
@@ -43,7 +44,7 @@ export default function InquiryTable({ inquiries, onRowClick }) {
                                         {item.title}
                                     </span>
                                 </td>
-                                <td className="text-center text-[var(--toss-text-medium)]">{item.date}</td>
+                                <td className="text-center text-[var(--toss-text-medium)]">{item.createdAt}</td>
                             </tr>
                         ))}
                     </tbody>
