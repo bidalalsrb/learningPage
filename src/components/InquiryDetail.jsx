@@ -22,8 +22,10 @@ export default function InquiryDetail() {
         return (
             <div className="min-h-screen flex flex-col">
                 <Header />
-                <main className="flex-1 flex items-center justify-center">
-                    <p className="text-gray-500">게시글을 찾을 수 없습니다.</p>
+                <main className="flex flex-1 items-center justify-center px-6">
+                    <div className="rounded-3xl border border-[var(--toss-border)] bg-white/80 px-8 py-12 text-center text-sm text-[var(--toss-text-medium)]">
+                        게시글을 찾을 수 없습니다.
+                    </div>
                 </main>
                 <Footer />
             </div>
@@ -34,29 +36,37 @@ export default function InquiryDetail() {
         <div className="min-h-screen flex flex-col">
             <Header />
 
-            <main className="flex-1 w-4/5 mx-auto px-6 md:px-12 py-10">
-                {/* 제목 */}
-                <h1 className="text-2xl font-bold text-gray-900 mb-4">{inquiry.title}</h1>
+            <main className="flex-1 px-6 py-12">
+                <div className="toss-container">
+                    <div className="rounded-[32px] border border-[var(--toss-border)] bg-white/90 p-10 shadow-[0_24px_60px_rgba(19,32,46,0.1)] backdrop-blur">
+                        <div className="flex flex-col gap-5 border-b border-[var(--toss-border)] pb-6 md:flex-row md:items-end md:justify-between">
+                            <div>
+                                <span className="toss-tag uppercase">Inquiry</span>
+                                <h1 className="mt-4 text-3xl font-bold tracking-tight text-[var(--toss-text-strong)] md:text-4xl">
+                                    {inquiry.title}
+                                </h1>
+                            </div>
+                            <div className="flex gap-4 text-xs text-[var(--toss-text-weak)] md:text-sm">
+                                <span>작성자 {inquiry.author}</span>
+                                <span>{inquiry.date}</span>
+                                <span>No. {inquiry.id}</span>
+                            </div>
+                        </div>
 
-                {/* 메타 정보 */}
-                <div className="flex justify-between text-sm text-gray-500 mb-6 border-b pb-3">
-                    <span>작성자: {inquiry.author}</span>
-                    <span>{inquiry.date}</span>
-                    <span>No. {inquiry.id}</span>
+                        <p className="mt-8 whitespace-pre-line text-sm leading-7 text-[var(--toss-text-medium)] md:text-base">
+                            {inquiry.content}
+                        </p>
+
+                        <div className="mt-8 flex justify-end">
+                            <button
+                                onClick={() => navigate(-1)}
+                                className="toss-secondary-btn h-11 px-6 text-sm"
+                            >
+                                뒤로가기
+                            </button>
+                        </div>
+                    </div>
                 </div>
-
-                {/* 본문 */}
-                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                    {inquiry.content}
-                </p>
-
-                {/* 뒤로가기 */}
-                <button
-                    onClick={() => navigate(-1)}
-                    className="mt-8 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                >
-                    뒤로가기
-                </button>
             </main>
 
             <Footer />

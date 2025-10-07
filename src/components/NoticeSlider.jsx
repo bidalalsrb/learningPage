@@ -24,78 +24,67 @@ export default function NoticeSlider() {
     }, [swiperInstance]);
 
     return (
-        <section className="px-6 md:px-12 py-16">
-            {/* 제목 */}
-            <div className="flex justify-between items-center mb-8">
-                <h2 className="text-2xl font-bold text-gray-900">사진</h2>
-                <a href="/photos" className="text-sm text-blue-600 hover:underline">
-                    More View +
-                </a>
-            </div>
+        <div className="relative flex items-center gap-4">
+            <button
+                ref={prevRef}
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-[var(--toss-border)] bg-white text-lg text-[var(--toss-text-medium)] transition hover:border-[var(--toss-border-strong)] hover:text-[var(--toss-primary)]"
+                aria-label="이전 사진"
+            >
+                &lsaquo;
+            </button>
 
-            {/* 버튼 + 슬라이더 묶음 */}
-            <div className="relative flex items-center gap-4">
-                {/* 왼쪽 버튼 */}
-                <button
-                    ref={prevRef}
-                    className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full shadow hover:bg-gray-200"
-                >
-                    &lt;
-                </button>
+            <Swiper
+                modules={[Navigation, Autoplay]}
+                onSwiper={setSwiperInstance}
+                autoplay={{ delay: 4000, disableOnInteraction: false }}
+                spaceBetween={24}
+                slidesPerView={1}
+                breakpoints={{
+                    1024: { slidesPerView: 4 },
+                    768: { slidesPerView: 2 },
+                }}
+                className="flex-1"
+            >
+                {photos.map((photo) => (
+                    <SwiperSlide key={photo.id}>
+                        <div
+                            className="surface-card flex h-64 cursor-pointer flex-col overflow-hidden rounded-3xl border border-[var(--toss-border)] transition hover:border-[var(--toss-border-strong)]"
+                            onClick={() => navigate(`/photos/${photo.id}`)}
+                        >
+                            {photo.img && (
+                                <img
+                                    src={photo.img}
+                                    alt={photo.title}
+                                    className="h-36 w-full object-cover"
+                                />
+                            )}
 
-                {/* 슬라이더 */}
-                <Swiper
-                    modules={[Navigation, Autoplay]}
-                    onSwiper={setSwiperInstance} // ✅ Swiper 인스턴스 저장
-                    autoplay={{ delay: 3000, disableOnInteraction: false }}
-                    spaceBetween={24}
-                    slidesPerView={1}
-                    breakpoints={{
-                        1024: { slidesPerView: 4 },
-                        768: { slidesPerView: 2 },
-                    }}
-                    className="flex-1"
-                >
-                    {photos.map((photo) => (
-                        <SwiperSlide key={photo.id}>
-                            <div
-                                className="bg-white rounded-xl shadow-sm hover:shadow-md transition overflow-hidden flex flex-col h-64 cursor-pointer"
-                                onClick={() => navigate(`/photos/${photo.id}`)} // ✅ 상세 이동
-                            >
-                                {/* 이미지 */}
-                                {photo.img && (
-                                    <img
-                                        src={photo.img}
-                                        alt={photo.title}
-                                        className="w-full h-32 object-cover"
-                                    />
-                                )}
-
-                                {/* 내용 */}
-                                <div className="p-4 flex flex-col justify-between flex-1">
-                                    <div>
-                                        <h3 className="font-semibold text-gray-900 line-clamp-1">
-                                            {photo.title}
-                                        </h3>
-                                        <p className="text-sm text-gray-600 mt-1 line-clamp-2">
-                                            {photo.desc}
-                                        </p>
-                                    </div>
-                                    <p className="text-xs text-gray-400 mt-3">{photo.date}</p>
+                            <div className="flex flex-1 flex-col justify-between gap-3 px-6 py-5">
+                                <div>
+                                    <h3 className="line-clamp-1 text-lg font-semibold text-[var(--toss-text-strong)]">
+                                        {photo.title}
+                                    </h3>
+                                    <p className="mt-1 line-clamp-2 text-sm text-[var(--toss-text-medium)]">
+                                        {photo.desc}
+                                    </p>
+                                </div>
+                                <div className="flex items-center justify-between text-xs text-[var(--toss-text-weak)]">
+                                    <span>{photo.author}</span>
+                                    <span>{photo.date}</span>
                                 </div>
                             </div>
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
+                        </div>
+                    </SwiperSlide>
+                ))}
+            </Swiper>
 
-                {/* 오른쪽 버튼 */}
-                <button
-                    ref={nextRef}
-                    className="w-10 h-10 flex items-center justify-center bg-gray-100 rounded-full shadow hover:bg-gray-200"
-                >
-                    &gt;
-                </button>
-            </div>
-        </section>
+            <button
+                ref={nextRef}
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-[var(--toss-border)] bg-white text-lg text-[var(--toss-text-medium)] transition hover:border-[var(--toss-border-strong)] hover:text-[var(--toss-primary)]"
+                aria-label="다음 사진"
+            >
+                &rsaquo;
+            </button>
+        </div>
     );
 }

@@ -25,19 +25,20 @@ export default function DetailCard({ isOpen, onClose, item, editable = false, on
         <Modal
             isOpen={isOpen}
             onRequestClose={onClose}
-            overlayClassName="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-            className="bg-white rounded-xl shadow-xl w-full max-w-md p-6 outline-none"
+            overlayClassName="fixed inset-0 z-50 flex items-center justify-center bg-[#0b1626]/60 px-4"
+            className="surface-card w-full max-w-md border border-[var(--toss-border-strong)] p-8 outline-none"
         >
             {/* 헤더 */}
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold">
+            <div className="mb-6 flex items-center justify-between">
+                <h2 className="text-2xl font-semibold tracking-tight text-[var(--toss-text-strong)]">
                     {editable ? "내용 수정" : form.title}
                 </h2>
                 <button
                     onClick={onClose}
-                    className="text-gray-400 hover:text-gray-600 text-lg"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-transparent text-lg text-[var(--toss-text-weak)] transition hover:border-[var(--toss-border)] hover:text-[var(--toss-text-medium)]"
                 >
-                    ✕
+                    <span aria-hidden>✕</span>
+                    <span className="sr-only">닫기</span>
                 </button>
             </div>
 
@@ -46,27 +47,27 @@ export default function DetailCard({ isOpen, onClose, item, editable = false, on
                 <img
                     src={form.image}
                     alt="미리보기"
-                    className="w-full h-48 object-cover rounded-md mb-4 border"
+                    className="mb-5 h-48 w-full rounded-2xl border border-[var(--toss-border)] object-cover"
                 />
             )}
 
             {/* 수정 모드 */}
             {editable ? (
-                <div className="space-y-3">
+                <div className="space-y-4">
                     <input
                         type="text"
                         name="title"
                         value={form.title}
                         onChange={handleChange}
                         placeholder="제목"
-                        className="w-full border px-3 py-2 rounded"
+                        className="w-full rounded-xl border border-[var(--toss-border)] px-4 py-3 text-sm transition focus:border-[var(--toss-primary)] focus:ring-0"
                     />
                     <textarea
                         name="description"
                         value={form.description}
                         onChange={handleChange}
                         placeholder="내용"
-                        className="w-full border px-3 py-2 rounded"
+                        className="h-32 w-full rounded-xl border border-[var(--toss-border)] px-4 py-3 text-sm transition focus:border-[var(--toss-primary)] focus:ring-0"
                     />
                     <input
                         type="text"
@@ -74,19 +75,19 @@ export default function DetailCard({ isOpen, onClose, item, editable = false, on
                         value={form.image}
                         onChange={handleChange}
                         placeholder="이미지 URL"
-                        className="w-full border px-3 py-2 rounded"
+                        className="w-full rounded-xl border border-[var(--toss-border)] px-4 py-3 text-sm transition focus:border-[var(--toss-primary)] focus:ring-0"
                     />
 
-                    <div className="flex justify-end gap-2">
+                    <div className="flex items-center justify-end gap-2">
                         <button
                             onClick={onClose}
-                            className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300"
+                            className="toss-secondary-btn h-11 px-5 text-sm"
                         >
                             취소
                         </button>
                         <button
                             onClick={() => onSave(form)}
-                            className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700"
+                            className="toss-primary-btn h-11 px-6 text-sm"
                         >
                             저장
                         </button>
@@ -95,13 +96,15 @@ export default function DetailCard({ isOpen, onClose, item, editable = false, on
             ) : (
                 <>
                     {/* 읽기 모드 */}
-                    <p className="text-gray-600 mb-6">{form.description}</p>
+                    <p className="mb-8 whitespace-pre-line text-sm text-[var(--toss-text-medium)]">
+                        {form.description}
+                    </p>
                     <div className="flex justify-center">
                         <a
                             href={item?.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                            className="toss-primary-btn h-12 px-7 text-sm"
                         >
                             문의하기
                         </a>

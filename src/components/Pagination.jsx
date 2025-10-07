@@ -1,32 +1,36 @@
 import React from "react";
 
 export default function Pagination({ currentPage, totalPages, onPageChange }) {
+    const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
     return (
-        <div className="flex justify-center items-center mt-8 space-x-2">
+        <div className="mt-12 flex items-center justify-center gap-2">
             <button
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
-                className="px-3 py-1 border rounded disabled:opacity-50"
+                className="h-10 rounded-full border border-[var(--toss-border)] px-3 text-sm font-medium text-[var(--toss-text-medium)] transition disabled:cursor-not-allowed disabled:opacity-40 hover:border-[var(--toss-border-strong)] hover:text-[var(--toss-primary)]"
             >
                 이전
             </button>
 
-            {Array.from({ length: totalPages }, (_, i) => (
+            {pages.map((page) => (
                 <button
-                    key={i + 1}
-                    onClick={() => onPageChange(i + 1)}
-                    className={`px-3 py-1 border rounded ${
-                        currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-white"
+                    key={page}
+                    onClick={() => onPageChange(page)}
+                    className={`h-10 min-w-10 rounded-full border px-3 text-sm font-semibold transition ${
+                        currentPage === page
+                            ? "border-transparent bg-[var(--toss-primary)] text-white"
+                            : "border-[var(--toss-border)] bg-white text-[var(--toss-text-medium)] hover:border-[var(--toss-border-strong)] hover:text-[var(--toss-primary)]"
                     }`}
                 >
-                    {i + 1}
+                    {page}
                 </button>
             ))}
 
             <button
                 onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className="px-3 py-1 border rounded disabled:opacity-50"
+                className="h-10 rounded-full border border-[var(--toss-border)] px-3 text-sm font-medium text-[var(--toss-text-medium)] transition disabled:cursor-not-allowed disabled:opacity-40 hover:border-[var(--toss-border-strong)] hover:text-[var(--toss-primary)]"
             >
                 다음
             </button>

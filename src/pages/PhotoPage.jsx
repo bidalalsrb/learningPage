@@ -18,20 +18,29 @@ export default function PhotoPage() {
         <div className="min-h-screen flex flex-col">
             <Header />
 
-            {/* 페이지 타이틀 */}
-            <section className="px-6 md:px-12 py-10 border-b">
-                <h1 className="text-3xl font-bold">사진 게시판</h1>
-                <p className="text-gray-500 mt-1">총 {photos.length}개의 게시글</p>
-            </section>
+            <main className="flex-1">
+                <section className="px-6 pt-12">
+                    <div className="toss-container text-center md:text-left">
+                        <span className="toss-tag uppercase">Archive</span>
+                        <h1 className="mt-4 text-3xl font-bold tracking-tight text-[var(--toss-text-strong)] md:text-4xl">
+                            사진 아카이브
+                        </h1>
+                        <p className="mt-3 text-sm text-[var(--toss-text-medium)] md:text-base">
+                            교육 현장의 순간과 분위기를 담았습니다. 총 {photos.length}개의 콘텐츠를 확인해보세요.
+                        </p>
+                    </div>
+                </section>
 
-            {/* 콘텐츠 */}
-            <main className="flex-1 max-w-7xl mx-auto px-6 md:px-12 py-10">
-                <PhotoGrid photos={currentPhotos} itemsPerPage={itemsPerPage} />
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={(page) => setCurrentPage(page)}
-                />
+                <section className="px-6 pb-16 pt-10">
+                    <div className="toss-container space-y-10">
+                        <PhotoGrid photos={currentPhotos} itemsPerPage={itemsPerPage} />
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={(page) => setCurrentPage(page)}
+                        />
+                    </div>
+                </section>
             </main>
 
             <Footer />

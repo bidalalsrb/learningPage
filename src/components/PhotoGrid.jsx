@@ -6,33 +6,31 @@ export default function PhotoGrid({ photos, itemsPerPage }) {
     const emptySlots = itemsPerPage - photos.length;
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {photos.map((item, idx) => (
                 <div
                     key={idx}
-                    className="bg-white rounded-lg shadow hover:shadow-md transition overflow-hidden cursor-pointer h-80 flex flex-col"
+                    className="surface-card flex h-80 cursor-pointer flex-col overflow-hidden rounded-3xl border border-[var(--toss-border)] transition hover:border-[var(--toss-border-strong)]"
                     onClick={() => navigate(`/photos/${item.id}`)}
                 >
-                    {/* 이미지 */}
                     {item.img && (
                         <img
                             src={item.img}
                             alt={item.title}
-                            className="w-full h-40 object-cover"
+                            className="h-44 w-full object-cover"
                         />
                     )}
 
-                    {/* 내용 */}
-                    <div className="p-4 flex-1 flex flex-col justify-between">
+                    <div className="flex flex-1 flex-col justify-between gap-3 px-6 py-5">
                         <div>
-                            <h3 className="font-semibold text-gray-900 line-clamp-1">
+                            <h3 className="line-clamp-1 text-lg font-semibold text-[var(--toss-text-strong)]">
                                 {item.title}
                             </h3>
-                            <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                            <p className="mt-2 line-clamp-3 text-sm text-[var(--toss-text-medium)]">
                                 {item.desc}
                             </p>
                         </div>
-                        <div className="flex justify-between items-center text-xs text-gray-400 mt-3">
+                        <div className="flex items-center justify-between text-xs text-[var(--toss-text-weak)]">
                             <span>{item.author}</span>
                             <span>{item.date}</span>
                             <span>👁 {item.views}</span>

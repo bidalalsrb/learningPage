@@ -1,61 +1,61 @@
 import React from "react";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Header() {
     const navigate = useNavigate();
 
-
     const handleHome = () => {
         navigate("/index");
-    }
-
+    };
 
     return (
-        <header className="flex justify-between items-center px-6 md:px-12 py-5 shadow-sm bg-white">
-            {/* 로고 + 회사명 */}
-            <div className="flex items-center gap-3 cursor-pointer" onClick={handleHome}>
-                <img src="/iconimg.png" alt="회사 로고" className="h-10 md:h-12 w-auto"/>
-            </div>
+        <header className="sticky top-0 z-40 border-b border-[var(--toss-border)] bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/70">
+            <div className="toss-container flex h-16 items-center justify-between">
+                <button
+                    type="button"
+                    onClick={handleHome}
+                    className="flex items-center gap-2 rounded-full border border-transparent px-3 py-1 transition hover:border-[var(--toss-border-strong)]"
+                >
+                    <img
+                        src="/iconimg.png"
+                        alt="HRnC 로고"
+                        className="h-10 w-auto"
+                    />
+                    <span className="hidden text-base font-semibold tracking-tight text-[var(--toss-text-strong)] md:inline">
+                        HRnC 교육컨설팅
+                    </span>
+                </button>
 
-            {/* 네비게이션 */}
-            <nav className="flex gap-5 md:gap-8 text-sm md:text-base text-gray-700">
-                <Link
-                    to="/company"
-                    className="cursor-pointer hover:text-blue-600 transition"
-                >
-                    회사 소개
-                </Link>
-                <Link
-                    to="/education"
-                    className="cursor-pointer hover:text-blue-600 transition"
-                >
-                    교육 프로그램
-                </Link>
-                <Link
-                    to="/stress"
-                    className="cursor-pointer hover:text-blue-600 transition"
-                >
-                    스트레스 관리
-                </Link>
-                <Link
-                    to="/photos"
-                    className="cursor-pointer hover:text-blue-600 transition"
-                >
-                    사진
-                </Link>
-                <Link
-                    to="/inquiry"
-                    className="cursor-pointer hover:text-blue-600 transition"
-                >
-                    문의
-                </Link>
-                {/*<Link*/}
-                {/*    to="#"*/}
-                {/*    className="cursor-pointer hover:text-blue-600 transition"*/}
-                {/*>*/}
-                {/*    관리자 기능*/}
-                {/*</Link>*/}
-            </nav>
+                <nav className="hidden items-center gap-7 text-sm font-medium text-[var(--toss-text-medium)] md:flex">
+                    <Link to="/company" className="transition hover:text-[var(--toss-primary)]">
+                        회사 소개
+                    </Link>
+                    <Link to="/education" className="transition hover:text-[var(--toss-primary)]">
+                        교육 프로그램
+                    </Link>
+                    <Link to="/stress" className="transition hover:text-[var(--toss-primary)]">
+                        스트레스 관리
+                    </Link>
+                    <Link to="/photos" className="transition hover:text-[var(--toss-primary)]">
+                        사진
+                    </Link>
+                    <Link to="/inquiry" className="transition hover:text-[var(--toss-primary)]">
+                        문의
+                    </Link>
+                </nav>
+
+                <div className="flex items-center gap-3">
+                    <Link
+                        to="/inquiry"
+                        className="hidden text-sm font-semibold text-[var(--toss-text-medium)] underline-offset-4 hover:text-[var(--toss-primary)] hover:underline md:inline"
+                    >
+                        상담 예약
+                    </Link>
+                    <Link to="/admin/login" className="toss-secondary-btn h-10 px-5 text-sm font-semibold">
+                        관리자
+                    </Link>
+                </div>
+            </div>
         </header>
     );
 }

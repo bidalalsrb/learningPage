@@ -1,4 +1,251 @@
 @import "tailwindcss";
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.css");
+
+:root {
+    color-scheme: light;
+    --toss-bg: #f7f8fb;
+    --toss-surface: #ffffff;
+    --toss-primary: #0064ff;
+    --toss-primary-dark: #004ad9;
+    --toss-primary-soft: rgba(0, 100, 255, 0.1);
+    --toss-text-strong: #191f28;
+    --toss-text-medium: #495057;
+    --toss-text-weak: #8b95a1;
+    --toss-border: rgba(25, 31, 40, 0.08);
+    --toss-border-strong: rgba(25, 31, 40, 0.16);
+    --toss-shadow: 0 18px 30px rgba(19, 32, 46, 0.08);
+}
+
+html {
+    font-family: "Pretendard Variable", "Pretendard", -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--toss-bg);
+    color: var(--toss-text-strong);
+}
+
+body {
+    margin: 0;
+    background: var(--toss-bg);
+    color: var(--toss-text-strong);
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+}
+
+* {
+    font-family: inherit;
+}
+
+a {
+    cursor: pointer;
+    color: inherit;
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--toss-primary);
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+    outline: 2px solid var(--toss-primary);
+    outline-offset: 2px;
+}
+
+.toss-container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.surface-card {
+    border-radius: 22px;
+    background: var(--toss-surface);
+    border: 1px solid var(--toss-border);
+    box-shadow: var(--toss-shadow);
+    transition: transform 0.25s ease, box-shadow 0.25s ease,
+        border-color 0.25s ease;
+}
+
+.surface-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 40px rgba(19, 32, 46, 0.12);
+    border-color: var(--toss-border-strong);
+}
+
+.toss-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    background: var(--toss-primary-soft);
+    color: var(--toss-primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.toss-primary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.875rem 1.75rem;
+    border-radius: 999px;
+    background: var(--toss-primary);
+    color: #fff;
+    font-weight: 600;
+    transition: background 0.25s ease, transform 0.25s ease,
+        box-shadow 0.25s ease;
+    box-shadow: 0 8px 18px rgba(0, 100, 255, 0.24);
+}
+
+.toss-primary-btn:hover {
+    background: var(--toss-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 22px rgba(0, 74, 217, 0.26);
+}
+
+.toss-secondary-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.875rem 1.75rem;
+    border-radius: 999px;
+    background: transparent;
+    border: 1px solid var(--toss-border);
+    color: var(--toss-text-medium);
+    font-weight: 600;
+    transition: background 0.25s ease, color 0.25s ease, border 0.25s ease;
+}
+
+.toss-secondary-btn:hover {
+    border-color: var(--toss-border-strong);
+    background: rgba(25, 31, 40, 0.04);
+    color: var(--toss-text-strong);
+}
+
+.toss-divider {
+    width: 100%;
+    height: 1px;
+    background: var(--toss-border);
+}
+
+.toss-gradient {
+    background: linear-gradient(140deg, rgba(0, 100, 255, 0.08), transparent 55%);
+}
+
+.toss-hero {
+    position: relative;
+    padding: 6rem 0;
+    overflow: hidden;
+    border-radius: 32px;
+    background: linear-gradient(120deg, #ffffff 10%, rgba(0, 100, 255, 0.08));
+}
+
+.toss-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+            circle at 20% 20%,
+            rgba(0, 100, 255, 0.22),
+            transparent 55%
+        ),
+        radial-gradient(circle at 80% 15%, rgba(0, 74, 217, 0.18), transparent 60%);
+    opacity: 0.9;
+    pointer-events: none;
+}
+
+.toss-hero > * {
+    position: relative;
+    z-index: 1;
+}
+
+.toss-hero-title {
+    font-size: clamp(2.6rem, 6vw, 3.75rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+.toss-hero-subtitle {
+    font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+    color: var(--toss-text-medium);
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.toss-section-title {
+    font-size: clamp(1.8rem, 3vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--toss-text-strong);
+}
+
+.toss-section-description {
+    color: var(--toss-text-medium);
+    font-size: 1rem;
+}
+
+.toss-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.8rem;
+    border-radius: 12px;
+    background: rgba(25, 31, 40, 0.05);
+    color: var(--toss-text-medium);
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.toss-chip strong {
+    color: var(--toss-text-strong);
+}
+
+.toss-meta {
+    color: var(--toss-text-weak);
+    font-size: 0.78rem;
+    letter-spacing: -0.008em;
+}
+
+.toss-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--toss-surface);
+    border-radius: 24px;
+    border: 1px solid var(--toss-border);
+    overflow: hidden;
+    box-shadow: var(--toss-shadow);
+}
+
+.toss-table thead {
+    background: rgba(25, 31, 40, 0.03);
+    color: var(--toss-text-medium);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.toss-table th,
+.toss-table td {
+    padding: 1rem 1.25rem;
+    text-align: left;
+}
+
+.toss-table tbody tr {
+    border-top: 1px solid rgba(25, 31, 40, 0.05);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.toss-table tbody tr:hover {
+    background: rgba(0, 100, 255, 0.04);
+    transform: translateX(4px);
+}
 
 .perspective {
     perspective: 1000px;
@@ -31,21 +278,13 @@
 .animate-fade-in {
     animation: fade-in 0.25s ease-out forwards;
 }
-.perspective {
-    perspective: 1000px;
-}
+
 .preserve-3d {
     transform-style: preserve-3d;
 }
-.backface-hidden {
-    backface-visibility: hidden;
-}
+
 .rotate-y-180 {
     transform: rotateY(180deg);
-}
-
-a {
-    cursor: pointer;
 }
 
 /* 스크롤바 디자인 (크롬/엣지/사파리) */

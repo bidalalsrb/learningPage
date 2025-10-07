@@ -1,11 +1,16 @@
-import React, {useEffect, useState} from "react";
-import DetailCard from "./DetailCard"; // ✅ ModalCard → DetailCard 교체
-import {FaCog, FaPlus} from "react-icons/fa";
+import React, { useEffect, useMemo, useState } from "react";
+import { FaCog, FaPlus } from "react-icons/fa";
+import DetailCard from "./DetailCard";
 import api from "../utils/api.js";
 
+const TARGET_LABEL = {
+    UNIVERSITY: "대학 프로그램",
+    COMPANY: "기업 프로그램",
+};
+
 export default function EducationPrograms() {
-    const [selectedItem, setSelectedItem] = useState(null); // 상세 보기용
-    const [editItem, setEditItem] = useState(null); // 수정 모달용
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [editItem, setEditItem] = useState(null);
     const [addItemModal, setAddItemModal] = useState(false);
     const [currentCategory, setCurrentCategory] = useState(null);
     const hasToken = !!localStorage.getItem("ACCESS_TOKEN");
@@ -13,7 +18,7 @@ export default function EducationPrograms() {
     const [categories, setCategories] = useState([
         {
             title: "진로",
-            type: "CAREER",     // ✅ enum 매핑
+            type: "CAREER",
             target: "UNIVERSITY",
             items: [],
         },
@@ -31,39 +36,30 @@ export default function EducationPrograms() {
         },
     ]);
 
-
     useEffect(() => {
         fetchPrograms();
     }, []);
+
     const fetchPrograms = async () => {
         try {
             const res = await api.get("/api/edu-programs");
-            console.log('aaaaaa',res)
-            // setCategories(res.data); // 서버에서 {title, items[]} 구조로 내려주면 됨
+            console.log("programs", res);
+            // setCategories(res.data);
         } catch (err) {
             console.error("프로그램 불러오기 실패:", err);
         }
     };
-    // 추가 핸들러 (진로 카테고리에만 적용)
-    const handleAdd = (newItem) => {
-        setCategories((prev) =>
-            prev.map((cat) =>
-                cat.title === "진로"
-                    ? { ...cat, items: [...cat.items, newItem].slice(0, 5) } // ✅ 최대 5개 제한
-                    : cat
-            )
-        );
-        setAddItemModal(false);
-    };
-    // ✅ 저장 (수정)
-    const handleSave = async (newData, cat) => {
+
+    const handleSave = async (newData, categoryArg) => {
+        const category = categoryArg || currentCategory;
+        if (!category) return;
         try {
             const formData = new FormData();
             formData.append("name", newData.title);
             formData.append("description", newData.description);
             formData.append("link", newData.link || "");
-            formData.append("type", cat.type);     // ✅ enum 값
-            formData.append("target", cat.target); // ✅ enum 값
+            formData.append("type", category.type);
+            formData.append("target", category.target);
 
             if (newData.image instanceof File) {
                 formData.append("image", newData.image);
@@ -88,166 +84,136 @@ export default function EducationPrograms() {
             alert("저장 실패 ❌");
         }
     };
-    // ✅ 삭제
-    const handleDelete = async (id) => {
-        if (!window.confirm("정말 삭제하시겠습니까?")) return;
-        try {
-            await api.delete(`/api/edu-programs/${id}`);
-            alert("삭제 성공 ✅");
-            fetchPrograms();
-        } catch (err) {
-            console.error("삭제 실패:", err);
-            alert("삭제 실패 ❌");
-        }
-    };
+
+    const groupedCategories = useMemo(() => {
+        return categories.reduce(
+            (acc, cat) => {
+                const key = cat.target || "UNIVERSITY";
+                acc[key] = acc[key] ? [...acc[key], cat] : [cat];
+                return acc;
+            },
+            {}
+        );
+    }, [categories]);
 
     return (
         <>
-            {/* 대학 섹션 */}
-            <section className="max-w-7xl mx-auto px-6 py-12 flex-1">
-                <div className="flex justify-between items-center mb-10">
-                    <h2 className="text-2xl font-bold">대학</h2>
-                </div>
+            {Object.entries(TARGET_LABEL).map(([target, label]) => {
+                const list = groupedCategories[target] || [];
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {categories.map((cat, idx) => (
-                        <div key={idx} className="bg-white rounded-lg shadow hover:shadow-md transition p-6">
-                            {/* 카테고리 타이틀 + + 버튼 */}
-                            <div className="flex justify-between items-center mb-4">
-                                <h3 className="text-lg font-semibold text-gray-800">
-                                    {cat.title}
-                                </h3>
-                                { hasToken && (
-                                    <button
-                                        onClick={() => {
-                                            setCurrentCategory(cat);   // ✅ 어느 카테고리에서 추가하는지 저장
-                                            setAddItemModal(true);
-                                        }}
-                                        className="ml-2 p-1 rounded-full  text-gray-500 hover:text-blue-500"
-                                    >
-                                        <FaPlus size={18} />
-                                    </button>
-                                )}
-                            </div>
-                            <ul className="space-y-3 max-h-100 overflow-y-auto pr-2 custom-scrollbar">
-                                {cat.items.map((item, i) => (
-                                    <li
-                                        key={i}
-                                        className="flex justify-between items-center p-3 rounded hover:bg-gray-50 transition"
-                                    >
-                                        {/* 상세 보기 */}
-                                        <div
-                                            className="cursor-pointer"
-                                            onClick={() =>
-                                                setSelectedItem({
-                                                    title: item.name,
-                                                    description: item.desc,
-                                                    image: item.img,
-                                                    link: item.link,
-                                                })
-                                            }
+                return (
+                    <section key={target} className="px-6 py-12">
+                        <div className="toss-container space-y-8">
+                            <header className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+                                <div>
+                                    <span className="toss-tag uppercase">
+                                        {target === "UNIVERSITY" ? "University" : "Corporate"}
+                                    </span>
+                                    <h3 className="toss-section-title mt-3">{label}</h3>
+                                    <p className="mt-2 text-sm text-[var(--toss-text-medium)]">
+                                        대상과 목적에 맞춰 가장 핵심적인 콘텐츠만 조합합니다.
+                                    </p>
+                                </div>
+                            </header>
+
+                            {list.length === 0 ? (
+                                <div className="rounded-3xl border border-dashed border-[var(--toss-border)] bg-white/60 px-10 py-20 text-center text-sm text-[var(--toss-text-weak)]">
+                                    아직 등록된 프로그램이 없습니다.
+                                </div>
+                            ) : (
+                                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                                    {list.map((cat) => (
+                                        <article
+                                            key={`${target}-${cat.title}`}
+                                            className="surface-card flex h-full flex-col gap-6 rounded-3xl border border-[var(--toss-border)] p-7"
                                         >
-                                            <p className="font-medium text-gray-700">{item.name}</p>
-                                            <p className="text-xs text-gray-500">{item.desc}</p>
-                                        </div>
+                                            <div className="flex items-center justify-between gap-4">
+                                                <div>
+                                                    <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--toss-text-weak)]">
+                                                        {target === "UNIVERSITY" ? "Campus" : "Business"}
+                                                    </p>
+                                                    <h4 className="mt-2 text-xl font-semibold text-[var(--toss-text-strong)]">
+                                                        {cat.title}
+                                                    </h4>
+                                                </div>
+                                                {hasToken && (
+                                                    <button
+                                                        onClick={() => {
+                                                            setCurrentCategory(cat);
+                                                            setAddItemModal(true);
+                                                        }}
+                                                        className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--toss-border)] text-[var(--toss-text-medium)] transition hover:border-[var(--toss-primary)] hover:text-[var(--toss-primary)]"
+                                                    >
+                                                        <FaPlus size={16} />
+                                                    </button>
+                                                )}
+                                            </div>
 
-                                        {/* 수정 아이콘 */}
-                                        {hasToken && (
-                                            <button
-                                                onClick={() =>
-                                                    setEditItem({
-                                                        title: item.name,
-                                                        description: item.desc,
-                                                        image: item.img,
-                                                        link: item.link,
-                                                    })
-                                                }
-                                                className="ml-3 text-gray-400 hover:text-blue-500"
-                                            >
-                                                <FaCog size={18} />
-                                            </button>
-                                        )}
-                                    </li>
-                                ))}
-                            </ul>
+                                            <ul className="space-y-3">
+                                                {cat.items.length === 0 && (
+                                                    <li className="rounded-2xl border border-dashed border-[var(--toss-border)] px-4 py-6 text-center text-sm text-[var(--toss-text-weak)]">
+                                                        등록된 프로그램이 없습니다.
+                                                    </li>
+                                                )}
+                                                {cat.items.map((item, idx) => (
+                                                    <li
+                                                        key={`${cat.title}-${idx}`}
+                                                        className="group flex items-start justify-between gap-3 rounded-2xl border border-transparent px-4 py-3 transition hover:border-[var(--toss-border)] hover:bg-white"
+                                                    >
+                                                        <button
+                                                            type="button"
+                                                            className="text-left"
+                                                            onClick={() =>
+                                                                setSelectedItem({
+                                                                    title: item.name,
+                                                                    description: item.desc,
+                                                                    image: item.img,
+                                                                    link: item.link,
+                                                                })
+                                                            }
+                                                        >
+                                                            <p className="text-sm font-semibold text-[var(--toss-text-strong)]">
+                                                                {item.name}
+                                                            </p>
+                                                            <p className="text-xs text-[var(--toss-text-medium)]">
+                                                                {item.desc}
+                                                            </p>
+                                                        </button>
+                                                        {hasToken && (
+                                                            <button
+                                                                onClick={() => {
+                                                                    setCurrentCategory(cat);
+                                                                    setEditItem({
+                                                                        id: item.id,
+                                                                        title: item.name,
+                                                                        description: item.desc,
+                                                                        image: item.img,
+                                                                        link: item.link,
+                                                                    });
+                                                                }}
+                                                                className="text-[var(--toss-text-weak)] transition hover:text-[var(--toss-primary)]"
+                                                            >
+                                                                <FaCog size={16} />
+                                                            </button>
+                                                        )}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </article>
+                                    ))}
+                                </div>
+                            )}
                         </div>
-                    ))}
-                </div>
-            </section>
+                    </section>
+                );
+            })}
 
-            {/* 기업 섹션 */}
-            <section className="max-w-7xl mx-auto px-6 pt-0 pb-12 flex-1">
-                <div className="flex justify-between items-center mb-10">
-                    <h2 className="text-2xl font-bold">기업</h2>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {categories.map((cat, idx) => (
-                        <div key={idx} className="bg-white rounded-lg shadow hover:shadow-md transition p-6">
-                            <div className="flex justify-between items-center mb-4">
-                                <h3 className="text-lg font-semibold text-gray-800">
-                                    {cat.title}
-                                </h3>
-                                { hasToken && (
-                                    <button
-                                        onClick={() => setAddItemModal(true)}
-                                        className="ml-2 p-1 rounded-full  text-gray-500 hover:text-blue-500"
-                                    >
-                                        <FaPlus size={18} />
-                                    </button>
-                                )}
-                            </div>
-                            <ul className="space-y-3 max-h-100 overflow-y-auto pr-2 custom-scrollbar">
-                                {cat.items.map((item, i) => (
-                                    <li
-                                        key={i}
-                                        className="flex justify-between items-center p-3 rounded hover:bg-gray-50 transition"
-                                    >
-                                        <div
-                                            className="cursor-pointer"
-                                            onClick={() =>
-                                                setSelectedItem({
-                                                    title: item.name,
-                                                    description: item.desc,
-                                                    image: item.img,
-                                                    link: item.link,
-                                                })
-                                            }
-                                        >
-                                            <p className="font-medium text-gray-700">{item.name}</p>
-                                            <p className="text-xs text-gray-500">{item.desc}</p>
-                                        </div>
-                                        {hasToken && (
-                                            <button
-                                                onClick={() =>
-                                                    setEditItem({
-                                                        title: item.name,
-                                                        description: item.desc,
-                                                        image: item.img,
-                                                        link: item.link,
-                                                    })
-                                                }
-                                                className="ml-3 text-gray-400 hover:text-blue-500"
-                                            >
-                                                <FaCog size={18} />
-                                            </button>
-                                        )}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
-            {/* 상세 보기 모달 */}
             <DetailCard
                 isOpen={!!selectedItem}
                 onClose={() => setSelectedItem(null)}
                 item={selectedItem}
             />
 
-            {/* 수정 모달 */}
             <DetailCard
                 isOpen={!!editItem}
                 onClose={() => setEditItem(null)}
@@ -255,7 +221,7 @@ export default function EducationPrograms() {
                 editable={true}
                 onSave={handleSave}
             />
-            {/* 추가 모달 */}
+
             <DetailCard
                 isOpen={addItemModal}
                 onClose={() => setAddItemModal(false)}

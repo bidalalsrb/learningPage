@@ -11,19 +11,21 @@ export default function EducationPage() {
         <div className="min-h-screen flex flex-col">
             <Header />
 
-            {/* 페이지 타이틀 */}
-            <section className="text-center py-10 border-b">
-                <h1 className="text-3xl font-bold">교육 프로그램</h1>
-            </section>
-
             <Breadcrumb
                 items={[
                     { label: "홈", to: "/index" },
                     { label: "교육 프로그램" }, // 현재 페이지 → 링크 없음
                 ]}
             />
-            <EducationHero />
-            <EducationPrograms />
+
+            <main className="flex-1">
+                <EducationHero
+                    title="교육 프로그램"
+                    eyebrow="Program Overview"
+                    description="HRnC는 학습자의 여정을 기준으로 다양한 맞춤형 교육을 설계합니다. 목적에 맞는 커리큘럼과 운영 전략을 제공합니다."
+                />
+                <EducationPrograms />
+            </main>
 
             <Footer />
         </div>

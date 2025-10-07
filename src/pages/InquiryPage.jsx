@@ -33,11 +33,6 @@ export default function InquiryPage() {
         <div className="min-h-screen flex flex-col ">
             <Header />
 
-            {/* 타이틀 */}
-            <section className="text-center py-10 border-b">
-                <h1 className="text-3xl font-bold">문의</h1>
-            </section>
-
             {/* Breadcrumb */}
             <Breadcrumb
                 items={[
@@ -46,26 +41,32 @@ export default function InquiryPage() {
                 ]}
             />
 
-            {/* 안내 */}
-            <section className="max-w-7xl mx-auto px-6 md:px-12 py-6 text-center">
-                <p className="text-red-600 font-bold text-lg">
-                    사업문의(02-561-2133)
-                </p>
-                <p className="text-gray-500 text-sm mt-2">
-                    취업 / 창업 / 용역사업 / 지원사업 / 단체교육 등 궁금한 사항은 문의게시판에 남겨주세요.
-                </p>
-            </section>
+            <main className="flex-1">
+                <section className="px-6 pt-12">
+                    <div className="toss-container text-center md:text-left">
+                        <span className="toss-tag uppercase">Contact</span>
+                        <h1 className="mt-4 text-3xl font-bold tracking-tight text-[var(--toss-text-strong)] md:text-4xl">
+                            문의 게시판
+                        </h1>
+                        <p className="mt-3 text-sm text-[var(--toss-text-medium)] md:text-base">
+                            취업 / 창업 / 용역사업 / 지원사업 / 단체교육 등 궁금한 사항을 남겨주시면 빠르게 응답드리겠습니다.
+                        </p>
+                        <p className="mt-6 text-sm font-semibold text-[var(--toss-primary)]">
+                            사업문의 02-561-2133
+                        </p>
+                    </div>
+                </section>
 
-            {/* 테이블 */}
-            <main className="flex-1 w-4/5 mx-auto px-6 md:px-12 py-6">
-                <InquiryTable inquiries={currentItems} onRowClick={handleRowClick} />
-
-                {/* 페이징 */}
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={setCurrentPage}
-                />
+                <section className="px-6 pb-16 pt-10">
+                    <div className="toss-container space-y-8">
+                        <InquiryTable inquiries={currentItems} onRowClick={handleRowClick} />
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={setCurrentPage}
+                        />
+                    </div>
+                </section>
             </main>
 
             <Footer />

@@ -1,63 +1,68 @@
-import React, { useState } from "react";
+import React from "react";
 import { FaBookOpen, FaLaptopCode, FaEnvelopeOpenText } from "react-icons/fa";
-import { useNavigate } from "react-router-dom"; // ✅ 페이지 이동용 훅
+import { HiArrowUpRight } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 
 export default function FeatureBoxes() {
-    const [active, setActive] = useState(null);
     const navigate = useNavigate();
 
     const features = [
         {
             title: "교육 프로그램",
             desc: "진로·취업·창업을 위한 맞춤형 교육 과정",
-            icon: <FaBookOpen className="w-16 h-16 text-blue-600" />,
-            link: "/education", // ✅ 이동할 경로
+            icon: <FaBookOpen className="h-8 w-8 text-[var(--toss-primary)]" />,
+            link: "/education",
+            badge: "Curriculum Design",
         },
         {
             title: "솔루션 개발",
             desc: "기업과 조직을 위한 효율적인 교육 플랫폼",
-            icon: <FaLaptopCode className="w-16 h-16 text-green-600" />,
-            link: "/solution", // ✅ 추후 페이지 생성 시 이동
+            icon: <FaLaptopCode className="h-8 w-8 text-[var(--toss-primary)]" />,
+            link: "/solution",
+            badge: "Digital Learning",
         },
         {
             title: "문의 / 견적",
             desc: "기업 및 개인 맞춤형 상담과 견적 제공",
-            icon: <FaEnvelopeOpenText className="w-16 h-16 text-red-500" />,
-            link: "/inquiry", // ✅ 문의 페이지
+            icon: <FaEnvelopeOpenText className="h-8 w-8 text-[var(--toss-primary)]" />,
+            link: "/inquiry",
+            badge: "Support",
         },
     ];
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {features.map((f, i) => (
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {features.map((feature, idx) => (
                 <div
-                    key={i}
-                    className="relative h-60 cursor-pointer rounded-xl overflow-hidden shadow-md flex flex-col items-center justify-center bg-gray-50 hover:shadow-lg transition"
-                    onClick={() => setActive(active === i ? null : i)}
+                    key={feature.title}
+                    role="button"
+                    tabIndex={0}
+                    onClick={() => navigate(feature.link)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            navigate(feature.link);
+                        }
+                    }}
+                    className="surface-card group flex h-full flex-col gap-6 rounded-3xl p-8 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--toss-primary)]"
                 >
-                    {/* 아이콘 */}
-                    <div
-                        className={`transition duration-500 ${
-                            active === i ? "opacity-30 blur-sm" : "opacity-100"
-                        }`}
-                    >
-                        {f.icon}
+                    <div className="flex items-center justify-between">
+                        <span className="toss-chip uppercase">{feature.badge}</span>
+                        <HiArrowUpRight className="h-5 w-5 text-[var(--toss-text-weak)] transition group-hover:text-[var(--toss-primary)]" />
                     </div>
 
-                    {/* 오버레이 (클릭 시 나타남) */}
-                    <div
-                        className={`absolute inset-0 flex flex-col items-center justify-center text-center px-4 transition-opacity duration-500 ${
-                            active === i ? "opacity-100" : "opacity-0"
-                        }`}
-                    >
-                        <h3 className="text-gray-900 text-xl font-bold mb-2">{f.title}</h3>
-                        <p className="text-gray-600 text-sm mb-4">{f.desc}</p>
-                        <button
-                            onClick={() => navigate(f.link)} // ✅ 해당 페이지로 이동
-                            className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
-                        >
-                            바로가기
-                        </button>
+                    <div className="flex flex-1 flex-col justify-between gap-6">
+                        <div className="flex items-center gap-4">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--toss-primary-soft)] text-[var(--toss-primary)]">
+                                {feature.icon}
+                            </div>
+                            <h3 className="text-xl font-semibold text-[var(--toss-text-strong)]">
+                                {feature.title}
+                            </h3>
+                        </div>
+                        <p className="text-sm leading-6 text-[var(--toss-text-medium)]">
+                            {feature.desc}
+                        </p>
                     </div>
                 </div>
             ))}
