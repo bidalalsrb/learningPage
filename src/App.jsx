@@ -13,6 +13,7 @@ import LoginPage from "./pages/LoginPage.jsx";
 import StressPage from "./pages/StressPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
 
+// App 컴포넌트는 라우터를 설정해 페이지 간 이동 경로를 정의합니다.
 function App() {
     return (
         <Router>

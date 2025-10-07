@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../utils/api.js";
 
+// SignupPage 컴포넌트는 관리자 회원가입 폼과 전송 흐름을 구성합니다.
 export default function SignupPage() {
     const navigate = useNavigate();
     const [form, setForm] = useState({ username: "", password: "" });
@@ -11,6 +12,7 @@ export default function SignupPage() {
     const isValid =
         form.username.trim().length >= 3 && form.password.trim().length >= 4;
 
+    // handleSubmit 함수는 회원가입 요청을 처리하고 성공 시 로그인 페이지로 이동합니다.
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!isValid || loading) return;

@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import api from "../utils/api.js";
 
+// LoginPage 컴포넌트는 관리자 로그인 폼과 인증 로직을 담당합니다.
 export default function LoginPage() {
     const navigate = useNavigate();
     const [form, setForm] = useState({username: "", password: ""});
@@ -10,6 +11,7 @@ export default function LoginPage() {
     const isValid =
         form.username.trim().length >= 3 && form.password.trim().length >= 4;
 
+    // handleSubmit 함수는 로그인 요청을 보내고 성공 시 토큰 저장 및 페이지 이동을 수행합니다.
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!isValid) return;

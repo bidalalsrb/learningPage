@@ -6,6 +6,7 @@ import EducationHero from "../components/EducationHero";
 import EducationPrograms from "../components/EducationPrograms";
 import Breadcrumb from "../components/Breadcrumb.jsx";
 
+// EducationPage 컴포넌트는 교육 프로그램 소개 화면을 구성합니다.
 export default function EducationPage() {
     return (
         <div className="min-h-screen flex flex-col">

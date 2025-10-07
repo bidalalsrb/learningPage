@@ -7,6 +7,7 @@ import Pagination from "../components/Pagination";
 import photos from "../data/photos";
 import api from "../utils/api.js";
 
+// PhotoPage 컴포넌트는 사진 목록을 불러와 페이지네이션과 함께 화면에 보여줍니다.
 export default function PhotoPage() {
     const itemsPerPage = 9;
     const [currentPage, setCurrentPage] = useState(1);
@@ -43,6 +44,7 @@ export default function PhotoPage() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
 
+    // normalizeImageUrl 함수는 서버에서 받은 이미지 경로를 브라우저가 접근 가능한 URL로 변환합니다.
     const normalizeImageUrl = (path) => {
         if (!path) return "";
         if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("/")) {
@@ -51,6 +53,7 @@ export default function PhotoPage() {
         return `/${path}`;
     };
 
+    // normalizePost 함수는 API 응답을 컴포넌트가 사용하기 쉬운 사진 데이터 형태로 정규화합니다.
     const normalizePost = (post) => {
         const images = (post.images || []).map((image, idx) => ({
             id: image.id ?? idx,
@@ -72,6 +75,7 @@ export default function PhotoPage() {
         };
     };
 
+    // fetchPhotos 함수는 서버에서 사진 목록을 가져오고 예외 상황에 맞춰 상태를 갱신합니다.
     const fetchPhotos = useCallback(async () => {
         setLoading(true);
         try {
@@ -147,22 +151,22 @@ export default function PhotoPage() {
                             </div>
                         ) : (
                             <>
-                        <PhotoGrid photos={currentPhotos} itemsPerPage={itemsPerPage} />
-                        {isAdmin && (
-                            <div className="flex justify-end">
-                                <Link
-                                    to="/photos/new"
-                                    className="toss-primary-btn h-11 px-6 text-sm"
-                                >
-                                    사진 등록하기
-                                </Link>
-                            </div>
-                        )}
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPages={totalPages}
-                            onPageChange={(page) => setCurrentPage(page)}
-                        />
+                                <PhotoGrid photos={currentPhotos} itemsPerPage={itemsPerPage} />
+                                {isAdmin && (
+                                    <div className="flex justify-end">
+                                        <Link
+                                            to="/photos/new"
+                                            className="toss-primary-btn h-11 px-6 text-sm"
+                                        >
+                                            사진 등록하기
+                                        </Link>
+                                    </div>
+                                )}
+                                <Pagination
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={(page) => setCurrentPage(page)}
+                                />
                             </>
                         )}
                     </div>

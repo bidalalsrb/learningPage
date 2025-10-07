@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import NoticeSlider from "../components/NoticeSlider";
 import FeatureBoxes from "../components/FeatureBoxes";
 
+// Home 컴포넌트는 메인 랜딩 페이지 레이아웃과 주요 섹션을 구성합니다.
 export default function Home() {
     return (
         <div className="flex min-h-screen flex-col">

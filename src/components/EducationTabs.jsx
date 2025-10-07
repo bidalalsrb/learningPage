@@ -1,5 +1,6 @@
 import React from "react";
 
+// EducationTabs 컴포넌트는 교육 관련 섹션을 전환하는 탭 UI를 제공합니다.
 export default function EducationTabs() {
     return (
         <nav className="bg-gray-800 text-white">

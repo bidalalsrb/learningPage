@@ -1,5 +1,6 @@
 import React from "react";
 
+// Banner 컴포넌트는 프로모션 섹션과 다운로드 버튼을 보여줍니다.
 export default function Banner() {
     return (
         <section className="bg-gradient-to-r from-blue-100 to-blue-50 py-16 text-center">

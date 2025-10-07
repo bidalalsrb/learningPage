@@ -19,6 +19,7 @@ const sampleInquiries = Array.from({ length: 21 }, (_, i) => ({
     date: `2025-09-${String((i % 30) + 1).padStart(2, "0")}`,
 }));
 
+// loadStoredInquiries 함수는 로컬스토리지에 저장된 문의 데이터를 불러와 정리합니다.
 const loadStoredInquiries = () => {
     if (typeof window === "undefined") return [];
     try {
@@ -36,6 +37,7 @@ const loadStoredInquiries = () => {
     }
 };
 
+// InquiryDetail 컴포넌트는 단일 문의의 상세 정보를 조회하고 삭제 기능을 제공합니다.
 export default function InquiryDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -52,6 +54,7 @@ export default function InquiryDetail() {
         []
     );
 
+    // useEffect 훅은 게시글 ID가 바뀔 때마다 상세 정보를 조회합니다.
     useEffect(() => {
         const fetchInquiry = async () => {
             setLoading(true);
@@ -79,6 +82,7 @@ export default function InquiryDetail() {
         fetchInquiry();
     }, [id, fallbackInquiries]);
 
+    // handleDelete 함수는 관리자 권한 확인 후 문의를 삭제합니다.
     const handleDelete = async () => {
         if (!isAdmin || !inquiry) return;
         if (!window.confirm("정말 삭제하시겠습니까?")) return;

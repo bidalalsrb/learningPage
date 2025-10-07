@@ -7,6 +7,7 @@ import "swiper/css/navigation";
 
 import photos from "../data/photos";
 
+// NoticeSlider 컴포넌트는 사진 데이터를 슬라이드 형태로 보여주고 탐색 버튼을 제어합니다.
 export default function NoticeSlider() {
     const prevRef = useRef(null);
     const nextRef = useRef(null);
@@ -14,6 +15,7 @@ export default function NoticeSlider() {
     const navigate = useNavigate();
 
     // ✅ Swiper 초기화 후 버튼 연결
+    // useEffect 훅은 Swiper 인스턴스가 준비되면 커스텀 네비게이션 버튼을 연결합니다.
     useEffect(() => {
         if (swiperInstance && prevRef.current && nextRef.current) {
             swiperInstance.params.navigation.prevEl = prevRef.current;

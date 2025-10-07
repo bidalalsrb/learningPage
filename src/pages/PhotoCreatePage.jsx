@@ -10,6 +10,7 @@ const initialForm = {
     content: "",
 };
 
+// PhotoCreatePage 컴포넌트는 관리자용 사진 등록 폼과 업로드 로직을 제공합니다.
 export default function PhotoCreatePage() {
     const navigate = useNavigate();
     const token = typeof window !== "undefined" ? localStorage.getItem("ACCESS_TOKEN") : null;
@@ -22,11 +23,13 @@ export default function PhotoCreatePage() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
+    // handleChange 함수는 입력 폼 필드 값을 상태에 반영합니다.
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
+    // handleFileChange 함수는 선택된 이미지 파일을 상태로 저장하고 미리보기를 생성합니다.
     const handleFileChange = (e) => {
         const selected = Array.from(e.target.files || []);
         previews.forEach((preview) => URL.revokeObjectURL(preview.url));
@@ -44,6 +47,7 @@ export default function PhotoCreatePage() {
         );
     };
 
+    // resetForm 함수는 입력 값과 미리보기 상태를 초기화합니다.
     const resetForm = () => {
         setForm(initialForm);
         previews.forEach((preview) => URL.revokeObjectURL(preview.url));
@@ -51,10 +55,12 @@ export default function PhotoCreatePage() {
         setPreviews([]);
     };
 
+    // useEffect 훅은 컴포넌트 언마운트 시 생성한 미리보기 URL을 해제합니다.
     useEffect(() => () => {
         previews.forEach((preview) => URL.revokeObjectURL(preview.url));
     }, [previews]);
 
+    // handleSubmit 함수는 사진 업로드 요청을 전송하고 성공 시 목록 페이지로 이동합니다.
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!form.title.trim() || !form.content.trim() || files.length === 0) {
@@ -120,7 +126,7 @@ export default function PhotoCreatePage() {
                 ]}
             />
 
-    <main className="flex-1 px-6 py-12">
+            <main className="flex-1 px-6 py-12">
                 <div className="toss-container max-w-4xl mx-auto space-y-8">
                     <div className="text-center md:text-left">
                         <span className="toss-tag uppercase">Archive</span>

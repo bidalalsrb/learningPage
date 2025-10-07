@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import EducationHero from "../components/EducationHero";
 import Breadcrumb from "../components/Breadcrumb.jsx";
 
+// StressPage 컴포넌트는 스트레스 관리 솔루션 소개 콘텐츠를 제공합니다.
 export default function StressPage() {
     return (
         <div className="min-h-screen flex flex-col">

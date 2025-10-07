@@ -5,9 +5,11 @@ import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb.jsx";
 import InquiryForm from "../components/InquiryForm.jsx";
 
+// InquiryCreatePage 컴포넌트는 문의 등록 폼을 표시하고 전송 성공 후 이동을 처리합니다.
 export default function InquiryCreatePage() {
     const navigate = useNavigate();
 
+    // handleSuccess 함수는 문의가 성공적으로 접수되면 목록 페이지로 이동시킵니다.
     const handleSuccess = () => {
         navigate("/inquiry", {
             replace: true,

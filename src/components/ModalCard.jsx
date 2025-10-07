@@ -3,6 +3,7 @@ import Modal from "react-modal";
 
 Modal.setAppElement("#root");
 
+// ModalCard 컴포넌트는 모달 창 형태로 이미지와 설명, 외부 링크를 표시합니다.
 export default function ModalCard({ isOpen, onClose, title, description, image, link }) {
     return (
         <Modal

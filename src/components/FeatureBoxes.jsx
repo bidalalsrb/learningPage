@@ -3,6 +3,7 @@ import { FaBookOpen, FaLaptopCode, FaEnvelopeOpenText } from "react-icons/fa";
 import { HiArrowUpRight } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 
+// FeatureBoxes 컴포넌트는 주요 서비스 섹션을 카드 형태로 제공하고 클릭 시 페이지를 이동시킵니다.
 export default function FeatureBoxes() {
     const navigate = useNavigate();
 

@@ -7,6 +7,7 @@ import InquiryTable from "../components/InquiryTable.jsx";
 import Pagination from "../components/Pagination.jsx";
 import api from "../utils/api.js";
 
+// InquiryPage 컴포넌트는 문의 목록을 불러와 페이지네이션과 함께 보여줍니다.
 export default function InquiryPage() {
     const navigate = useNavigate(); // ✅ 네비게이션 훅
     const location = useLocation();
@@ -35,6 +36,7 @@ export default function InquiryPage() {
     const itemsPerPage = 3;
     const [currentPage, setCurrentPage] = useState(1);
 
+    // fetchInquiries 함수는 서버에서 문의 목록을 가져오고 예외에 대비한 상태를 설정합니다.
     const fetchInquiries = useCallback(async () => {
         setLoading(true);
         try {
@@ -79,6 +81,7 @@ export default function InquiryPage() {
     }, [currentPage, inquiries]);
 
     // ✅ 게시글 클릭 → 상세 이동
+    // handleRowClick 함수는 선택한 문의 상세 페이지로 이동합니다.
     const handleRowClick = (item) => {
         navigate(`/inquiry/${item.id}`);
     };

@@ -1,5 +1,6 @@
 import React from "react";
 
+// Pagination 컴포넌트는 현재 페이지와 총 페이지 수를 기반으로 이동 버튼을 렌더링합니다.
 export default function Pagination({ currentPage, totalPages, onPageChange }) {
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
