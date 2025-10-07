@@ -1,9 +1,13 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import api from "../utils/api.js";
 import photos from "../data/photos";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
 
 const normalizeImageUrl = (path) => {
     if (!path) return "";
@@ -57,6 +61,9 @@ export default function PhotoDetail() {
     const [photo, setPhoto] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+    const prevRef = useRef(null);
+    const nextRef = useRef(null);
+    const [swiperInstance, setSwiperInstance] = useState(null);
 
     const fallbackPhoto = useMemo(
         () => samplePhotos.find((item) => String(item.id) === String(id)) || null,
@@ -86,6 +93,15 @@ export default function PhotoDetail() {
 
         fetchPhoto();
     }, [id, fallbackPhoto]);
+
+    useEffect(() => {
+        if (swiperInstance && prevRef.current && nextRef.current) {
+            swiperInstance.params.navigation.prevEl = prevRef.current;
+            swiperInstance.params.navigation.nextEl = nextRef.current;
+            swiperInstance.navigation.init();
+            swiperInstance.navigation.update();
+        }
+    }, [swiperInstance]);
 
     if (loading) {
         return (
@@ -139,17 +155,45 @@ export default function PhotoDetail() {
                         </div>
 
                         {photo.images?.length > 0 ? (
-                            <div
-                                className={`mt-8 grid gap-4 ${photo.images.length > 1 ? "md:grid-cols-2" : ""}`}
-                            >
-                                {photo.images.map((image) => (
-                                    <img
-                                        key={image.id}
-                                        src={image.url}
-                                        alt={image.originalFilename || photo.title}
-                                        className="h-[360px] w-full rounded-3xl object-cover"
-                                    />
-                                ))}
+                            <div className="mt-8">
+                                <div className="relative">
+                                    <Swiper
+                                        modules={[Navigation]}
+                                        onSwiper={setSwiperInstance}
+                                        slidesPerView={1}
+                                        spaceBetween={16}
+                                        className="rounded-3xl"
+                                    >
+                                        {photo.images.map((image) => (
+                                            <SwiperSlide key={image.id}>
+                                                <img
+                                                    src={image.url}
+                                                    alt={image.originalFilename || photo.title}
+                                                    className="h-[420px] w-full rounded-3xl object-cover"
+                                                />
+                                            </SwiperSlide>
+                                        ))}
+                                    </Swiper>
+
+                                    {photo.images.length > 1 && (
+                                        <>
+                                            <button
+                                                ref={prevRef}
+                                                className="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--toss-border)] bg-white/90 text-lg text-[var(--toss-text-medium)] shadow transition hover:border-[var(--toss-border-strong)] hover:text-[var(--toss-primary)]"
+                                                aria-label="이전 사진"
+                                            >
+                                                &lsaquo;
+                                            </button>
+                                            <button
+                                                ref={nextRef}
+                                                className="absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--toss-border)] bg-white/90 text-lg text-[var(--toss-text-medium)] shadow transition hover:border-[var(--toss-border-strong)] hover:text-[var(--toss-primary)]"
+                                                aria-label="다음 사진"
+                                            >
+                                                &rsaquo;
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
                             </div>
                         ) : (
                             primaryImage && (
