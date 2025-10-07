@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route,Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import EducationPage from "./pages/EducationPage";
 import PhotoPage from "./pages/PhotoPage.jsx";
@@ -14,6 +14,7 @@ function App() {
     return (
         <Router>
             <Routes>
+                <Route path="/" element={<Navigate to="/index" replace />} />
                 <Route path="/index" element={<Home />} />
                 <Route path="/admin/login" element={<LoginPage />} />
                 <Route path="/company" element={<CompanyPage />} />
