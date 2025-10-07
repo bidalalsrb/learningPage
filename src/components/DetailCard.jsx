@@ -169,7 +169,7 @@ export default function DetailCard({
         >
             <div className="mb-6 flex items-center justify-between">
                 <h2 className="text-2xl font-semibold tracking-tight text-[var(--toss-text-strong)]">
-                    {editable ? "내용 수정" : form.title}
+                    {editable ? (form.id ? "내용 수정" : "내용 추가") : form.title}
                 </h2>
                 <button
                     onClick={onClose}
