@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Breadcrumb from "../components/Breadcrumb.jsx";
 import PhotoGrid from "../components/PhotoGrid";
 import Pagination from "../components/Pagination";
 import photos from "../data/photos";
@@ -119,6 +120,13 @@ export default function PhotoPage() {
     return (
         <div className="min-h-screen flex flex-col">
             <Header />
+
+            <Breadcrumb
+                items={[
+                    { label: "홈", to: "/index" },
+                    { label: "사진 아카이브" },
+                ]}
+            />
 
             <main className="flex-1">
                 <section className="px-6 pt-12">

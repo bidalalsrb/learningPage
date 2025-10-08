@@ -5,6 +5,7 @@ import EducationPage from "./pages/EducationPage";
 import PhotoPage from "./pages/PhotoPage.jsx";
 import PhotoDetail from "./components/PhotoDetail.jsx";
 import PhotoCreatePage from "./pages/PhotoCreatePage.jsx";
+import PhotoEditPage from "./pages/PhotoEditPage.jsx";
 import InquiryPage from "./pages/InquiryPage.jsx";
 import InquiryDetail from "./components/InquiryDetail.jsx";
 import InquiryCreatePage from "./pages/InquiryCreatePage.jsx";
@@ -27,6 +28,7 @@ function App() {
                 <Route path="/stress" element={<StressPage />} />
                 <Route path="/photos" element={<PhotoPage />} />
                 <Route path="/photos/new" element={<PhotoCreatePage />} />
+                <Route path="/photos/:id/edit" element={<PhotoEditPage />} />
                 <Route path="/photos/:id" element={<PhotoDetail />} />
                 <Route path="/inquiry" element={<InquiryPage />}/>
                 <Route path="/inquiry/new" element={<InquiryCreatePage />} />

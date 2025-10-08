@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FaCog, FaPlus } from "react-icons/fa";
 import DetailCard from "./DetailCard";
 import ProgramDetailModal from "./ProgramDetailModal";
@@ -23,6 +23,12 @@ const CATEGORY_ORDER = [
     { target: "COMPANY", type: "JOB" },
     { target: "COMPANY", type: "STARTUP" },
 ];
+
+const CATEGORY_COVER_LABEL = {
+    CAREER: "진로 프로그램 대표 이미지",
+    JOB: "취업 프로그램 대표 이미지",
+    STARTUP: "창업 프로그램 대표 이미지",
+};
 
 const buildEmptyCategories = () =>
     CATEGORY_ORDER.map(({ target, type }) => ({
@@ -87,9 +93,12 @@ export default function EducationPrograms() {
     const [editItem, setEditItem] = useState(null);
     const [addItemModal, setAddItemModal] = useState(false);
     const [currentCategory, setCurrentCategory] = useState(null);
+    const coverInputsRef = useRef({});
+    const coverImagesRef = useRef({});
+    const [coverImages, setCoverImages] = useState({});
     const hasToken = !!localStorage.getItem("ACCESS_TOKEN");
 
-    const [categories, setCategories] = useState(() => buildEmptyCategories());
+    const getCategoryKey = useCallback((cat) => `${cat.target}-${cat.type}`, []);
 
     const resolveImageUrl = useCallback((path) => {
         if (!path) return "";
@@ -105,6 +114,129 @@ export default function EducationPrograms() {
         return base ? `${base}/${normalized}` : `/${normalized}`;
     }, []);
 
+    const parseCategoryKey = useCallback((catKey) => {
+        const [target, type] = catKey.split("-");
+        return { target, type };
+    }, []);
+
+    const resolveCoverPreview = useCallback(
+        (data) => {
+            if (!data) return null;
+            const url = data.url || data.storedPath || "";
+            return url ? resolveImageUrl(url) : "";
+        },
+        [resolveImageUrl]
+    );
+
+    const [categories, setCategories] = useState(() => buildEmptyCategories());
+
+    const uploadCover = useCallback(
+        async (catKey, file) => {
+            const { target, type } = parseCategoryKey(catKey);
+            const formData = new FormData();
+            formData.append("target", target);
+            formData.append("type", type);
+            formData.append("image", file);
+
+            const res = await api.post("/api/edu-programs/covers", formData);
+            const preview = resolveCoverPreview(res.data);
+
+            return {
+                preview,
+                storedPath: res.data?.storedPath || null,
+                persisted: true,
+                originalFilename: res.data?.originalFilename || "",
+                isObjectUrl: false,
+            };
+        },
+        [parseCategoryKey, resolveCoverPreview]
+    );
+
+    const handleCoverFileChange = useCallback(
+        (catKey, fileList, inputElement) => {
+            if (!fileList || fileList.length === 0) {
+                return;
+            }
+            const file = fileList[0];
+            if (typeof window === "undefined" || !file) {
+                return;
+            }
+
+            const previousEntry = coverImagesRef.current[catKey];
+            const previewUrl = URL.createObjectURL(file);
+
+            setCoverImages((prev) => ({
+                ...prev,
+                [catKey]: {
+                    file,
+                    preview: previewUrl,
+                    isObjectUrl: true,
+                    persisted: false,
+                    uploading: true,
+                },
+            }));
+
+            const clearInput = () => {
+                if (inputElement) {
+                    inputElement.value = "";
+                }
+            };
+
+            const finalizeUpload = async () => {
+                try {
+                    const uploaded = await uploadCover(catKey, file);
+                    if (previewUrl) {
+                        URL.revokeObjectURL(previewUrl);
+                    }
+                    setCoverImages((prev) => ({
+                        ...prev,
+                        [catKey]: uploaded,
+                    }));
+                } catch (error) {
+                    console.error("대표 이미지 업로드 실패:", error);
+                    if (previewUrl) {
+                        URL.revokeObjectURL(previewUrl);
+                    }
+                    setCoverImages((prev) => {
+                        const updated = { ...prev };
+                        delete updated[catKey];
+                        if (previousEntry) {
+                            updated[catKey] = previousEntry;
+                        }
+                        return updated;
+                    });
+                    alert("대표 이미지 업로드에 실패했습니다. 다시 시도해주세요.");
+                }
+            };
+
+            clearInput();
+            void finalizeUpload();
+        },
+        [uploadCover]
+    );
+
+    const triggerCoverInput = useCallback((catKey) => {
+        const target = coverInputsRef.current[catKey];
+        if (target) {
+            target.click();
+        }
+    }, []);
+
+    useEffect(() => {
+        coverImagesRef.current = coverImages;
+    }, [coverImages]);
+
+    useEffect(
+        () => () => {
+            Object.values(coverImagesRef.current).forEach((entry) => {
+                if (entry?.isObjectUrl && entry?.preview) {
+                    URL.revokeObjectURL(entry.preview);
+                }
+            });
+        },
+        []
+    );
+
     const fetchPrograms = useCallback(async () => {
         try {
             const res = await api.get("/api/edu-programs");
@@ -117,9 +249,36 @@ export default function EducationPrograms() {
         }
     }, [resolveImageUrl]);
 
+    const fetchCoverImages = useCallback(async () => {
+        try {
+            const res = await api.get("/api/edu-programs/covers");
+            const mapped = {};
+            (Array.isArray(res.data) ? res.data : []).forEach((cover) => {
+                if (!cover?.target || !cover?.type) {
+                    return;
+                }
+                const key = `${cover.target}-${cover.type}`;
+                mapped[key] = {
+                    preview: resolveCoverPreview(cover),
+                    storedPath: cover.storedPath,
+                    persisted: true,
+                    originalFilename: cover.originalFilename || "",
+                    isObjectUrl: false,
+                };
+            });
+            setCoverImages(mapped);
+        } catch (err) {
+            console.error("대표 이미지 불러오기 실패:", err);
+        }
+    }, [resolveCoverPreview]);
+
     useEffect(() => {
         fetchPrograms();
     }, [fetchPrograms]);
+
+    useEffect(() => {
+        fetchCoverImages();
+    }, [fetchCoverImages]);
 
     const handleSave = async (newData, categoryArg) => {
         const category = categoryArg || currentCategory;
@@ -218,17 +377,20 @@ export default function EducationPrograms() {
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                                    {list.map((cat) => (
-                                        <article
-                                            key={`${target}-${cat.type}`}
-                                            className="surface-card flex h-full flex-col gap-6 rounded-3xl border border-[var(--toss-border)] p-7"
-                                        >
-                                            <div className="flex items-center justify-between gap-4">
-                                                <div>
-                                                    <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--toss-text-weak)]">
-                                                        {target === "UNIVERSITY" ? "Campus" : "Business"}
-                                                    </p>
-                                                    <h4 className="mt-2 text-xl font-semibold text-[var(--toss-text-strong)]">
+                                    {list.map((cat) => {
+                                        const catKey = getCategoryKey(cat);
+                                        const cover = coverImages[catKey];
+                                        return (
+                                            <article
+                                                key={`${target}-${cat.type}`}
+                                                className="surface-card flex h-full flex-col gap-6 rounded-3xl border border-[var(--toss-border)] p-7"
+                                            >
+                                                <div className="flex items-center justify-between gap-4">
+                                                    <div>
+                                                        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--toss-text-weak)]">
+                                                            {target === "UNIVERSITY" ? "Campus" : "Business"}
+                                                        </p>
+                                                        <h4 className="mt-2 text-xl font-semibold text-[var(--toss-text-strong)]">
                                                         {cat.title}
                                                     </h4>
                                                 </div>
@@ -245,7 +407,68 @@ export default function EducationPrograms() {
                                                 )}
                                             </div>
 
-                                            <ul className="custom-scrollbar space-y-3 max-h-80 overflow-y-auto pr-1">
+                                                <figure className="relative -mx-2 aspect-[3/2] overflow-hidden rounded-3xl border border-[var(--toss-border)] bg-gradient-to-br from-[var(--toss-primary-soft)] via-white to-[#f6f9fc]">
+                                                    {cover?.preview ? (
+                                                        <img
+                                                            src={cover.preview}
+                                                            alt={`${cat.title} 대표 이미지`}
+                                                            className="h-full w-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        <div className="absolute inset-0 grid place-items-center">
+                                                            <span className="rounded-full border border-[var(--toss-border)] bg-white/85 px-4 py-1 text-xs font-medium text-[var(--toss-text-medium)]">
+                                                                {CATEGORY_COVER_LABEL[cat.type] || "대표 이미지 영역"}
+                                                            </span>
+                                                        </div>
+                                                    )}
+
+                                                    {hasToken && (
+                                                        <>
+                                                            <div className="absolute bottom-3 right-3 flex gap-2">
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => triggerCoverInput(catKey)}
+                                                                    className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--toss-border)] bg-white/85 text-[var(--toss-text-medium)] shadow transition hover:border-[var(--toss-primary)] hover:text-[var(--toss-primary)]"
+                                                                    title="대표 이미지 추가"
+                                                                >
+                                                                    <FaPlus size={14} />
+                                                                </button>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => triggerCoverInput(catKey)}
+                                                                    disabled={!cover}
+                                                                    className={`flex h-9 w-9 items-center justify-center rounded-full border border-[var(--toss-border)] bg-white/85 text-[var(--toss-text-medium)] shadow transition ${
+                                                                        cover
+                                                                            ? "hover:border-[var(--toss-primary)] hover:text-[var(--toss-primary)]"
+                                                                            : "opacity-50"
+                                                                    }`}
+                                                                    aria-disabled={!cover}
+                                                                    title="대표 이미지 수정"
+                                                                >
+                                                                    <FaCog size={14} />
+                                                                </button>
+                                                            </div>
+
+                                                            <input
+                                                                ref={(el) => {
+                                                                    coverInputsRef.current[catKey] = el;
+                                                                }}
+                                                                type="file"
+                                                                accept="image/*"
+                                                                className="hidden"
+                                                                onChange={(event) =>
+                                                                    handleCoverFileChange(
+                                                                        catKey,
+                                                                        event.target.files,
+                                                                        event.target
+                                                                    )
+                                                                }
+                                                            />
+                                                        </>
+                                                    )}
+                                                </figure>
+
+                                                <ul className="custom-scrollbar space-y-3 max-h-80 overflow-y-auto pr-1">
                                                 {cat.items.length === 0 && (
                                                     <li className="rounded-2xl border border-dashed border-[var(--toss-border)] px-4 py-6 text-center text-sm text-[var(--toss-text-weak)]">
                                                         등록된 프로그램이 없습니다.
@@ -309,7 +532,8 @@ export default function EducationPrograms() {
                                                 ))}
                                             </ul>
                                         </article>
-                                    ))}
+                                    );
+                                    })}
                                 </div>
                             )}
                         </div>

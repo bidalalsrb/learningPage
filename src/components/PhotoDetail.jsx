@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Breadcrumb from "../components/Breadcrumb.jsx";
 import api from "../utils/api.js";
 import photos from "../data/photos";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -64,6 +65,22 @@ export default function PhotoDetail() {
     const prevRef = useRef(null);
     const nextRef = useRef(null);
     const [swiperInstance, setSwiperInstance] = useState(null);
+    const isAdmin = useMemo(() => {
+        if (typeof window === "undefined") return false;
+        return Boolean(localStorage.getItem("ACCESS_TOKEN"));
+    }, []);
+    const breadcrumbItems = useMemo(() => {
+        const items = [
+            { label: "홈", to: "/index" },
+            { label: "사진 아카이브", to: "/photos" },
+        ];
+        if (photo?.title) {
+            items.push({ label: photo.title });
+        } else {
+            items.push({ label: "상세 보기" });
+        }
+        return items;
+    }, [photo?.title]);
 
     const fallbackPhoto = useMemo(
         () => samplePhotos.find((item) => String(item.id) === String(id)) || null,
@@ -107,6 +124,7 @@ export default function PhotoDetail() {
         return (
             <div className="min-h-screen flex flex-col">
                 <Header />
+                <Breadcrumb items={breadcrumbItems} />
                 <main className="flex flex-1 items-center justify-center px-6">
                     <div className="rounded-3xl border border-[var(--toss-border)] bg-white/80 px-8 py-12 text-center text-sm text-[var(--toss-text-medium)]">
                         데이터를 불러오는 중입니다...
@@ -121,6 +139,7 @@ export default function PhotoDetail() {
         return (
             <div className="min-h-screen flex flex-col">
                 <Header />
+                <Breadcrumb items={breadcrumbItems} />
                 <main className="flex flex-1 items-center justify-center px-6">
                     <div className="rounded-3xl border border-[var(--toss-border)] bg-white/80 px-8 py-12 text-center text-sm text-[var(--toss-text-medium)]">
                         {error || "게시글을 찾을 수 없습니다."}
@@ -136,6 +155,7 @@ export default function PhotoDetail() {
     return (
         <div className="min-h-screen flex flex-col">
             <Header />
+            <Breadcrumb items={breadcrumbItems} />
 
             <main className="flex-1 px-6 py-12">
                 <div className="toss-container space-y-10">
@@ -209,7 +229,15 @@ export default function PhotoDetail() {
                             {photo.content || photo.desc}
                         </p>
 
-                        <div className="mt-8 flex justify-end">
+                        <div className="mt-8 flex flex-wrap justify-end gap-3">
+                            {isAdmin && (
+                                <button
+                                    onClick={() => navigate(`/photos/${photo.id}/edit`)}
+                                    className="toss-primary-btn h-11 px-6 text-sm"
+                                >
+                                    수정하기
+                                </button>
+                            )}
                             <button
                                 onClick={() => navigate(-1)}
                                 className="toss-secondary-btn h-11 px-6 text-sm"
