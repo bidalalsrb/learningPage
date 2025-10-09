@@ -1,10 +1,11 @@
 import axios from "axios";
 
 const api = axios.create({
-    // baseURL: "http://3.37.89.229:8080/",
-    baseURL: "http://localhost:8080/",
+    baseURL:
+        window.location.hostname === "localhost"
+            ? "http://localhost:8080/api" // 로컬 (Spring 직접)
+            : "/api",                     // 운영 (Apache 프록시 통해 접근)
 });
-
 // 요청 인터셉터 (JWT 토큰 자동 추가)
 api.interceptors.request.use((config) => {
     if (typeof window !== "undefined") {
