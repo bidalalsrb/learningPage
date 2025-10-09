@@ -3,8 +3,8 @@ import axios from "axios";
 const api = axios.create({
     baseURL:
         window.location.hostname === "localhost"
-            ? "http://localhost:8080/api" // 로컬 (Spring 직접)
-            : "/api",                     // 운영 (Apache 프록시 통해 접근)
+            ? "http://localhost:8080/" // 로컬 개발용
+            : "https://kel.o-r.kr/",   // 운영서버에서는 HTTPS로
 });
 // 요청 인터셉터 (JWT 토큰 자동 추가)
 api.interceptors.request.use((config) => {

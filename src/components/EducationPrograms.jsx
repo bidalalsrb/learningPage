@@ -508,7 +508,8 @@ export default function EducationPrograms() {
                                                         </button>
                                                         {hasToken && (
                                                             <button
-                                                                onClick={() => {
+                                                                onClick={(event) => {
+                                                                    event.stopPropagation();
                                                                     setCurrentCategory(cat);
                                                                     setEditItem({
                                                                         id: item.id,
