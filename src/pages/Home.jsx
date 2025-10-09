@@ -119,10 +119,10 @@ export default function Home() {
                         </p>
                     </div>
                     <Link
-                        to="/education"
+                        to="/inquiry"
                         className="toss-primary-btn w-full max-w-xs self-center md:self-auto"
                     >
-                        프로그램 제안서 받기
+                        문의하기
                     </Link>
                 </div>
             </section>

@@ -16,11 +16,11 @@ export default function FeatureBoxes() {
             badge: "Curriculum Design",
         },
         {
-            title: "솔루션 개발",
+            title: "스트레스 관리",
             desc: "기업과 조직을 위한 효율적인 교육 플랫폼",
             icon: <FaLaptopCode className="h-8 w-8 text-[var(--toss-primary)]" />,
-            link: "/solution",
-            badge: "Digital Learning",
+            link: "/stress",
+            badge: "Stress",
         },
         {
             title: "문의 / 견적",

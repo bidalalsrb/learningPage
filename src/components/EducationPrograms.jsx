@@ -478,25 +478,26 @@ export default function EducationPrograms() {
                                                     <li
                                                         key={`${cat.type}-${item.id ?? idx}`}
                                                         className="group flex items-start justify-between gap-3 rounded-2xl border border-transparent px-4 py-3 transition hover:border-[var(--toss-border)] hover:bg-white"
+                                                        onClick={() =>
+                                                            setSelectedItem({
+                                                                id: item.id,
+                                                                title: item.name,
+                                                                description: item.desc,
+                                                                images: (item.images || []).map(
+                                                                    (image, imageIdx) => ({
+                                                                        ...image,
+                                                                        id:
+                                                                            image.id ||
+                                                                            `${item.id}-image-${imageIdx}`,
+                                                                    })
+                                                                ),
+                                                            })
+                                                        }
                                                     >
                                                         <button
                                                             type="button"
                                                             className="text-left"
-                                                            onClick={() =>
-                                                                setSelectedItem({
-                                                                    id: item.id,
-                                                                    title: item.name,
-                                                                    description: item.desc,
-                                                                    images: (item.images || []).map(
-                                                                        (image, imageIdx) => ({
-                                                                            ...image,
-                                                                            id:
-                                                                                image.id ||
-                                                                                `${item.id}-image-${imageIdx}`,
-                                                                        })
-                                                                    ),
-                                                                })
-                                                            }
+
                                                         >
                                                             <p className="text-sm font-semibold text-[var(--toss-text-strong)]">
                                                                 {item.name}

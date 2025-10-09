@@ -13,11 +13,11 @@ export default function Header() {
 
     return (
         <header className="sticky top-0 z-40 border-b border-[var(--toss-border)] bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/70">
-            <div className="toss-container flex h-16 items-center justify-between">
+            <div className="toss-container flex h-16 items-center justify-between ">
                 <button
                     type="button"
                     onClick={handleHome}
-                    className="flex items-center gap-2 rounded-full border border-transparent px-3 py-1 transition "
+                    className="flex items-center gap-2 rounded-full border border-transparent px-3 py-1 transition cursor-pointer"
                 >
                     <img
                         src="/iconimg.png"
