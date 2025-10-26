@@ -19,10 +19,21 @@ export default function CompanyPage() {
 
             <main className="flex-1">
                 <EducationHero
-                    title="사람과 조직이 함께 성장하는 방법을 연구합니다"
-                    eyebrow="About HRnC"
-                    description="HRnC 교육컨설팅은 데이터 기반의 학습 경험 설계를 통해 대학과 기업의 성장을 돕습니다. 본질에 집중하는 심플한 구조로 교육의 임팩트를 극대화합니다."
-                />
+                    title={
+                        <>
+                            안녕하십니까
+                            <br />
+                            한국ESG리더십교육협회 한진아 입니다.
+                        </>
+                    }
+                    eyebrow="회사 소개"
+                    description="우리 협회는 ESG(Environment, Social, Governance)를 지속 가능한 발전을 위한 핵심 가치로 인식하며, 이를 실현하기 위해 노력하고 있습니다.
+ESG는 단순한 경영 전략이 아닌, 모든 조직과 개인이 함께 만들어가야 할 미래의 필수 요소입니다.
+
+우리 협회는 ESG 경영 철학을 바탕으로 사회적 책임, 환경적 지속 가능성, 윤리적 경영을 실천하며, 이를 통해 ESG 가치를 확산시키고 실질적인 변화를 이끌고자 합니다.
+앞으로도 ESG 교육과 다양한 활동을 통해 개인과 사회, 기업이 함께 성장할 수 있는 환경을 만들어가겠습니다.
+
+감사합니다."/>
 
                 <section className="px-6 pb-16">
                     <div className="toss-container grid gap-8 md:grid-cols-2">
