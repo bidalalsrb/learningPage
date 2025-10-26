@@ -3,6 +3,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import EducationHero from "../components/EducationHero";
 import Breadcrumb from "../components/Breadcrumb.jsx";
+import CompanyIntro from "../components/CompanyIntro.jsx";
 
 // CompanyPage 컴포넌트는 기업 소개와 핵심 가치 정보를 제공합니다.
 export default function CompanyPage() {
@@ -18,7 +19,7 @@ export default function CompanyPage() {
             />
 
             <main className="flex-1">
-                <EducationHero
+                <CompanyIntro
                     title={
                         <>
                             안녕하십니까
