@@ -6,15 +6,18 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
+// getPortalTarget 함수는 브라우저 환경에서 모달을 렌더링할 돔 노드를 반환합니다.
 const getPortalTarget = () =>
     typeof document !== "undefined" ? document.body : null;
 
+// resolveImageSrc 함수는 다양한 이미지 객체에서 미리보기 URL을 추출합니다.
 const resolveImageSrc = (image) => {
     if (!image) return "";
     if (typeof image === "string") return image;
     return image.preview || image.url || image.src || "";
 };
 
+// ProgramDetailModal 컴포넌트는 프로그램 상세 내용을 모달로 보여줍니다.
 export default function ProgramDetailModal({ isOpen, item, onClose }) {
     const portalTarget = getPortalTarget();
     const [swiperInstance, setSwiperInstance] = useState(null);
@@ -59,16 +62,19 @@ export default function ProgramDetailModal({ isOpen, item, onClose }) {
         return null;
     }
 
+    // handleOverlayClick 함수는 오버레이 영역을 클릭하면 모달을 닫습니다.
     const handleOverlayClick = (event) => {
         if (event.target === event.currentTarget) {
             onClose?.();
         }
     };
 
+    // handlePrevSlide 함수는 이전 이미지를 표시하도록 Swiper를 제어합니다.
     const handlePrevSlide = () => {
         swiperInstance?.slidePrev();
     };
 
+    // handleNextSlide 함수는 다음 이미지를 표시하도록 Swiper를 제어합니다.
     const handleNextSlide = () => {
         swiperInstance?.slideNext();
     };

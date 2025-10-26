@@ -30,6 +30,7 @@ const CATEGORY_COVER_LABEL = {
     STARTUP: "창업 프로그램 대표 이미지",
 };
 
+// buildEmptyCategories 함수는 기본 카테고리 구조를 빈 리스트로 초기화합니다.
 const buildEmptyCategories = () =>
     CATEGORY_ORDER.map(({ target, type }) => ({
         title: CATEGORY_TYPE_LABEL[type] ?? type,
@@ -38,6 +39,7 @@ const buildEmptyCategories = () =>
         items: [],
     }));
 
+// buildCategoriesFromPrograms 함수는 프로그램 목록을 카테고리별로 그룹화합니다.
 const buildCategoriesFromPrograms = (programs, resolveImageUrl) => {
     const categoryMap = new Map(
         CATEGORY_ORDER.map(({ target, type }) => [
@@ -98,8 +100,10 @@ export default function EducationPrograms() {
     const [coverImages, setCoverImages] = useState({});
     const hasToken = !!localStorage.getItem("ACCESS_TOKEN");
 
+    // getCategoryKey 함수는 카테고리 객체에서 고유 키 문자열을 생성합니다.
     const getCategoryKey = useCallback((cat) => `${cat.target}-${cat.type}`, []);
 
+    // resolveImageUrl 함수는 API 기반 URL을 브라우저에서 접근 가능한 경로로 변환합니다.
     const resolveImageUrl = useCallback((path) => {
         if (!path) return "";
         if (/^https?:\/\//i.test(path) || path.startsWith("data:")) {
@@ -114,11 +118,13 @@ export default function EducationPrograms() {
         return base ? `${base}/${normalized}` : `/${normalized}`;
     }, []);
 
+    // parseCategoryKey 함수는 문자열 키를 target/type 객체로 파싱합니다.
     const parseCategoryKey = useCallback((catKey) => {
         const [target, type] = catKey.split("-");
         return { target, type };
     }, []);
 
+    // resolveCoverPreview 함수는 대표 이미지 데이터에서 미리보기 URL을 찾습니다.
     const resolveCoverPreview = useCallback(
         (data) => {
             if (!data) return null;
@@ -130,6 +136,7 @@ export default function EducationPrograms() {
 
     const [categories, setCategories] = useState(() => buildEmptyCategories());
 
+    // uploadCover 함수는 선택한 카테고리의 대표 이미지를 서버에 업로드합니다.
     const uploadCover = useCallback(
         async (catKey, file) => {
             const { target, type } = parseCategoryKey(catKey);
@@ -152,6 +159,7 @@ export default function EducationPrograms() {
         [parseCategoryKey, resolveCoverPreview]
     );
 
+    // handleCoverFileChange 함수는 대표 이미지 업로드 전 미리보기와 예외 처리를 담당합니다.
     const handleCoverFileChange = useCallback(
         (catKey, fileList, inputElement) => {
             if (!fileList || fileList.length === 0) {
@@ -215,6 +223,7 @@ export default function EducationPrograms() {
         [uploadCover]
     );
 
+    // triggerCoverInput 함수는 숨겨진 파일 입력 요소를 클릭합니다.
     const triggerCoverInput = useCallback((catKey) => {
         const target = coverInputsRef.current[catKey];
         if (target) {
@@ -237,6 +246,7 @@ export default function EducationPrograms() {
         []
     );
 
+    // fetchPrograms 함수는 교육 프로그램 목록을 불러와 카테고리 상태로 변환합니다.
     const fetchPrograms = useCallback(async () => {
         try {
             const res = await api.get("/api/edu-programs");
@@ -249,6 +259,7 @@ export default function EducationPrograms() {
         }
     }, [resolveImageUrl]);
 
+    // fetchCoverImages 함수는 카테고리별 대표 이미지를 불러옵니다.
     const fetchCoverImages = useCallback(async () => {
         try {
             const res = await api.get("/api/edu-programs/covers");
@@ -280,6 +291,7 @@ export default function EducationPrograms() {
         fetchCoverImages();
     }, [fetchCoverImages]);
 
+    // handleSave 함수는 생성·수정 폼 데이터를 전송하고 목록을 새로고칩니다.
     const handleSave = async (newData, categoryArg) => {
         const category = categoryArg || currentCategory;
         if (!category) return;
@@ -324,6 +336,7 @@ export default function EducationPrograms() {
         }
     };
 
+    // handleDelete 함수는 선택한 프로그램을 삭제하고 목록을 재요청합니다.
     const handleDelete = async (programId) => {
         if (!programId) return;
         const confirmed = window.confirm("정말 삭제하시겠습니까?");
@@ -502,9 +515,9 @@ export default function EducationPrograms() {
                                                             <p className="text-sm font-semibold text-[var(--toss-text-strong)]">
                                                                 {item.name}
                                                             </p>
-                                                            <p className="text-xs text-[var(--toss-text-medium)]">
-                                                                {item.desc}
-                                                            </p>
+                                                            {/*<p className="text-xs text-[var(--toss-text-medium)]">*/}
+                                                            {/*    {item.desc}*/}
+                                                            {/*</p>*/}
                                                         </button>
                                                         {hasToken && (
                                                             <button

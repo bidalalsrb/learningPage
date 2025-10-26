@@ -1,5 +1,6 @@
 import React from "react";
 
+// EducationHero 컴포넌트는 교육 페이지의 상단 소개 영역을 렌더링합니다.
 export default function EducationHero({
     title = "HRnC 교육 프로그램",
     description = "진로 · 취업 · 창업 · 조직개발까지, 맞춤형 프로그램을 만나보세요.",

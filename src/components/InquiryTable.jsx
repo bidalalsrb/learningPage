@@ -1,7 +1,7 @@
 import React from "react";
 
+// InquiryTable 컴포넌트는 문의 목록을 표 형태로 표시합니다.
 export default function InquiryTable({ inquiries, onRowClick }) {
-    console.log(inquiries)
     return (
         <div className="space-y-4">
             <div className="flex flex-col gap-3 rounded-3xl border border-[var(--toss-border)] bg-white/70 px-4 py-4 text-sm text-[var(--toss-text-medium)] md:flex-row md:items-center md:justify-between">

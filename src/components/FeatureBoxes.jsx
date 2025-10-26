@@ -33,7 +33,7 @@ export default function FeatureBoxes() {
 
     return (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {features.map((feature, idx) => (
+            {features.map((feature) => (
                 <div
                     key={feature.title}
                     role="button"

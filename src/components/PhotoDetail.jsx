@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -10,52 +10,11 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 
-const normalizeImageUrl = (path) => {
-    if (!path) return "";
-    if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("/")) {
-        return path;
-    }
-    return `/${path}`;
-};
+import { buildSamplePhotoList, normalizePhotoPost } from "../utils/photo.js";
 
-const samplePhotos = photos.map((item, idx) => ({
-    id: item.id ?? idx,
-    title: item.title,
-    content: item.desc,
-    desc: item.desc,
-    author: item.author,
-    date: item.date,
-    views: item.views,
-    images: item.img
-        ? [
-              {
-                  id: `sample-${item.id ?? idx}`,
-                  url: normalizeImageUrl(item.img),
-                  originalFilename: item.img,
-                  sortIndex: 0,
-              },
-          ]
-        : [],
-}));
+const samplePhotos = buildSamplePhotoList(photos);
 
-const normalizePost = (post) => {
-    const images = (post.images || []).map((image, index) => ({
-        id: image.id ?? index,
-        url: normalizeImageUrl(image.url || image.imageUrl || image.storedPath),
-        originalFilename: image.originalFilename,
-        sortIndex: image.sortIndex ?? index,
-    }));
-    return {
-        id: post.id,
-        title: post.title,
-        content: post.content,
-        author: post.author || "관리자",
-        date: post.createdAt ? post.createdAt.slice(0, 10) : "",
-        views: post.views || 0,
-        images,
-    };
-};
-
+// PhotoDetail 컴포넌트는 단일 사진 게시글의 상세 내용을 보여줍니다.
 export default function PhotoDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -87,29 +46,30 @@ export default function PhotoDetail() {
         [id]
     );
 
-    useEffect(() => {
-        const fetchPhoto = async () => {
-            setLoading(true);
-            try {
-                const res = await api.get(`/api/photo-posts/${id}`);
-                setPhoto(normalizePost(res.data));
-                setError("");
-            } catch (err) {
-                console.error("사진 상세 불러오기 실패:", err);
-                if (fallbackPhoto) {
-                    setPhoto(fallbackPhoto);
-                    setError("네트워크 오류로 샘플 데이터가 표시됩니다.");
-                } else {
-                    setPhoto(null);
-                    setError("게시글을 찾을 수 없습니다.");
-                }
-            } finally {
-                setLoading(false);
+    // fetchPhoto 함수는 선택한 게시글을 불러오거나 실패 시 샘플 데이터를 사용합니다.
+    const fetchPhoto = useCallback(async () => {
+        setLoading(true);
+        try {
+            const res = await api.get(`/api/photo-posts/${id}`);
+            setPhoto(normalizePhotoPost(res.data));
+            setError("");
+        } catch (err) {
+            console.error("사진 상세 불러오기 실패:", err);
+            if (fallbackPhoto) {
+                setPhoto(fallbackPhoto);
+                setError("네트워크 오류로 샘플 데이터가 표시됩니다.");
+            } else {
+                setPhoto(null);
+                setError("게시글을 찾을 수 없습니다.");
             }
-        };
+        } finally {
+            setLoading(false);
+        }
+    }, [fallbackPhoto, id]);
 
+    useEffect(() => {
         fetchPhoto();
-    }, [id, fallbackPhoto]);
+    }, [fetchPhoto]);
 
     useEffect(() => {
         if (swiperInstance && prevRef.current && nextRef.current) {

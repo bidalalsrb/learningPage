@@ -7,6 +7,7 @@ import "swiper/css/navigation";
 
 import photos from "../data/photos";
 import api from "../utils/api.js";
+import { buildSamplePhotoList, normalizePhotoPost } from "../utils/photo.js";
 
 // NoticeSlider 컴포넌트는 사진 데이터를 슬라이드 형태로 보여주고 탐색 버튼을 제어합니다.
 export default function NoticeSlider() {
@@ -18,45 +19,9 @@ export default function NoticeSlider() {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
-    const normalizeImageUrl = (path) => {
-        if (!path) return "";
-        if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("/")) {
-            return path;
-        }
-        return `/${path}`;
-    };
+    const sampleSlides = useMemo(() => buildSamplePhotoList(photos), []);
 
-    const sampleSlides = useMemo(
-        () =>
-            photos.map((photo, idx) => ({
-                id: photo.id ?? idx,
-                title: photo.title,
-                desc: photo.desc,
-                author: photo.author,
-                date: photo.date,
-                img: normalizeImageUrl(photo.img),
-                createdAt: photo.date ? new Date(photo.date).getTime() : 0,
-            })),
-        []
-    );
-
-    const normalizePost = useCallback(
-        (post, idx) => {
-            const images = Array.isArray(post.images) ? post.images : [];
-            const primary = images[0]?.url || post.imageUrl || post.thumbnailUrl || post.coverImage;
-            return {
-                id: post.id ?? `photo-${idx}`,
-                title: post.title ?? "",
-                desc: post.content ?? "",
-                author: post.author || "관리자",
-                date: post.createdAt ? post.createdAt.slice(0, 10) : "",
-                img: normalizeImageUrl(primary),
-                createdAt: post.createdAt ? new Date(post.createdAt).getTime() : 0,
-            };
-        },
-        []
-    );
-
+    // fetchSlides 함수는 최신 사진 게시물을 불러오고 없으면 샘플 데이터를 보여줍니다.
     const fetchSlides = useCallback(async () => {
         setLoading(true);
         try {
@@ -66,7 +31,7 @@ export default function NoticeSlider() {
                 setSlides(sampleSlides.slice(0, 8));
                 setError("등록된 사진이 아직 없어 샘플 이미지가 표시됩니다.");
             } else {
-                const normalized = list.map(normalizePost);
+                const normalized = list.map((post, idx) => normalizePhotoPost(post, idx));
                 normalized.sort((a, b) => b.createdAt - a.createdAt);
                 setSlides(normalized.slice(0, 8));
                 setError("");
@@ -78,7 +43,7 @@ export default function NoticeSlider() {
         } finally {
             setLoading(false);
         }
-    }, [normalizePost, sampleSlides]);
+    }, [sampleSlides]);
 
     useEffect(() => {
         fetchSlides();

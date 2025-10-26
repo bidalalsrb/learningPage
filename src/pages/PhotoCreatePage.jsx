@@ -77,7 +77,7 @@ export default function PhotoCreatePage() {
         files.forEach((file) => formData.append("images", file));
 
         try {
-            const res = await api.post("/api/photo-posts", formData, {
+            await api.post("/api/photo-posts", formData, {
                 headers: {
                     Authorization: token ? `Bearer ${token}` : undefined,
                 },

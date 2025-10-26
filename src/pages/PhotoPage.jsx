@@ -7,6 +7,7 @@ import PhotoGrid from "../components/PhotoGrid";
 import Pagination from "../components/Pagination";
 import photos from "../data/photos";
 import api from "../utils/api.js";
+import { buildSamplePhotoList, normalizePhotoPost } from "../utils/photo.js";
 
 // PhotoPage 컴포넌트는 사진 목록을 불러와 페이지네이션과 함께 화면에 보여줍니다.
 export default function PhotoPage() {
@@ -15,79 +16,25 @@ export default function PhotoPage() {
     const navigate = useNavigate();
     const token = typeof window !== "undefined" ? localStorage.getItem("ACCESS_TOKEN") : null;
     const isAdmin = useMemo(() => Boolean(token), [token]);
-    const samplePhotoList = useMemo(
-        () =>
-            photos.map((item, idx) => ({
-                id: item.id ?? idx,
-                title: item.title,
-                desc: item.desc,
-                content: item.desc,
-                author: item.author,
-                date: item.date,
-                views: item.views,
-                img: item.img,
-                images: item.img
-                    ? [
-                          {
-                              id: `sample-${item.id ?? idx}`,
-                              url: item.img,
-                              originalFilename: item.img,
-                              sortIndex: 0,
-                          },
-                      ]
-                    : [],
-            })),
-        []
-    );
+    // 샘플 포토 데이터는 API 장애 시에도 동일한 UI를 보장하기 위해 미리 정규화합니다.
+    const samplePhotoList = useMemo(() => buildSamplePhotoList(photos), []);
     const [photoList, setPhotoList] = useState(samplePhotoList);
     const location = useLocation();
     const [flashMessage, setFlashMessage] = useState(location.state?.message || "");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
 
-    // normalizeImageUrl 함수는 서버에서 받은 이미지 경로를 브라우저가 접근 가능한 URL로 변환합니다.
-    const normalizeImageUrl = (path) => {
-        if (!path) return "";
-        if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("/")) {
-            return path;
-        }
-        return `/${path}`;
-    };
-
-    // normalizePost 함수는 API 응답을 컴포넌트가 사용하기 쉬운 사진 데이터 형태로 정규화합니다.
-    const normalizePost = (post) => {
-        const images = (post.images || []).map((image, idx) => ({
-            id: image.id ?? idx,
-            url: normalizeImageUrl(image.url || image.imageUrl || image.storedPath),
-            originalFilename: image.originalFilename,
-            sortIndex: image.sortIndex ?? idx,
-        }));
-        const primary = images[0]?.url;
-        return {
-            id: post.id,
-            title: post.title,
-            desc: post.content,
-            content: post.content,
-            author: post.author || "관리자",
-            date: post.createdAt ? post.createdAt.slice(0, 10) : "",
-            views: post.views || 0,
-            img: normalizeImageUrl(primary),
-            images,
-        };
-    };
-
     // fetchPhotos 함수는 서버에서 사진 목록을 가져오고 예외 상황에 맞춰 상태를 갱신합니다.
     const fetchPhotos = useCallback(async () => {
         setLoading(true);
         try {
             const res = await api.get("/api/photo-posts");
-            console.log('res', res);
             const list = Array.isArray(res.data) ? res.data : [];
             if (list.length === 0) {
                 setPhotoList(samplePhotoList);
                 setError("등록된 사진이 아직 없습니다. 샘플 데이터가 표시됩니다.");
             } else {
-                setPhotoList(list.map(normalizePost));
+                setPhotoList(list.map((post, idx) => normalizePhotoPost(post, idx)));
                 setError("");
             }
         } catch (err) {

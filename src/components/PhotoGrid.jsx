@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+// PhotoGrid 컴포넌트는 사진 목록을 카드 형태로 나열합니다.
 export default function PhotoGrid({ photos, itemsPerPage }) {
     const navigate = useNavigate();
     const emptySlots = itemsPerPage - photos.length;

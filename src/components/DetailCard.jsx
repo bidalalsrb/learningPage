@@ -1,11 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 
+// normaliseToArray 함수는 단일 값 또는 배열을 항상 배열 형태로 변환합니다.
 const normaliseToArray = (value) => {
     if (!value) return [];
     if (Array.isArray(value)) return value.filter(Boolean);
     return [value].filter(Boolean);
 };
 
+// createEmptyForm 함수는 모달 폼의 초기값을 정의합니다.
 const createEmptyForm = () => ({
     id: null,
     title: "",
@@ -14,6 +16,7 @@ const createEmptyForm = () => ({
     images: [],
 });
 
+// DetailCard 컴포넌트는 프로그램 상세 정보를 보고 수정할 수 있는 모달을 제공합니다.
 export default function DetailCard({
     isOpen,
     onClose,
@@ -25,6 +28,7 @@ export default function DetailCard({
     const [form, setForm] = useState(createEmptyForm());
     const objectUrlRef = useRef([]);
 
+    // clearObjectUrls 함수는 생성된 미리보기 URL을 모두 해제합니다.
     const clearObjectUrls = () => {
         objectUrlRef.current.forEach((url) => URL.revokeObjectURL(url));
         objectUrlRef.current = [];
@@ -104,11 +108,13 @@ export default function DetailCard({
         return () => clearObjectUrls();
     }, [item]);
 
+    // handleChange 함수는 입력 필드 변경을 폼 상태에 반영합니다.
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
+    // handleFileChange 함수는 첨부한 이미지 파일을 상태에 추가하고 미리보기를 생성합니다.
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files || []);
         if (!files.length) return;
@@ -132,6 +138,7 @@ export default function DetailCard({
         e.target.value = "";
     };
 
+    // handleRemoveImage 함수는 선택한 이미지를 리스트에서 제거합니다.
     const handleRemoveImage = (imageId) => {
         setForm((prev) => {
             const target = prev.images.find((img) => img.id === imageId);
@@ -148,11 +155,13 @@ export default function DetailCard({
         });
     };
 
+    // handleSave 함수는 부모 컴포넌트에 저장 이벤트를 전달합니다.
     const handleSave = () => {
         if (!editable) return;
         onSave?.(form);
     };
 
+    // handleDelete 함수는 부모 컴포넌트에 삭제 이벤트를 전달합니다.
     const handleDelete = () => {
         if (!editable || !form.id) return;
         onDelete?.(form.id);
@@ -176,11 +185,13 @@ export default function DetailCard({
         return null;
     }
 
+    // handleOverlayClick 함수는 오버레이 클릭 시 모달을 닫습니다.
     const handleOverlayClick = (e) => {
         e.stopPropagation();
         onClose?.();
     };
 
+    // preventPropagation 함수는 모달 내부 클릭 시 오버레이 이벤트 전파를 막습니다.
     const preventPropagation = (e) => {
         e.stopPropagation();
     };

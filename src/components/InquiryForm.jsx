@@ -14,6 +14,7 @@ const initialForm = {
     content: "",
 };
 
+// InquiryForm 컴포넌트는 문의 등록을 위한 입력 폼과 제출 로직을 제공합니다.
 export default function InquiryForm({ onSubmit }) {
     const [form, setForm] = useState(initialForm);
     const [loading, setLoading] = useState(false);
@@ -26,11 +27,13 @@ export default function InquiryForm({ onSubmit }) {
         form.title.trim().length >= 2 &&
         form.content.trim().length >= 5;
 
+    // handleChange 함수는 입력 필드 변화를 상태에 반영합니다.
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
+    // handleSubmit 함수는 문의 데이터를 서버에 전송하고 성공 여부 메시지를 처리합니다.
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!isValid || loading) return;
@@ -47,7 +50,6 @@ export default function InquiryForm({ onSubmit }) {
             title: form.title.trim(),
             content: form.content.trim(),
         };
-        console.log(payload);
         try {
             const res = await api.post("/api/inquiries", payload);
             const created = res.data;

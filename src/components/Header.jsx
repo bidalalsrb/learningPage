@@ -1,12 +1,14 @@
 import React, { useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+// Header 컴포넌트는 상단 내비게이션과 관리자 버튼을 렌더링합니다.
 export default function Header() {
     const navigate = useNavigate();
 
     const token = typeof window !== "undefined" ? localStorage.getItem("ACCESS_TOKEN") : null;
     const isAdmin = useMemo(() => Boolean(token), [token]);
 
+    // handleHome 함수는 메인 페이지로 이동합니다.
     const handleHome = () => {
         navigate("/index");
     };

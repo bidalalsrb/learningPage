@@ -24,6 +24,7 @@ const NAV_GROUPS = [
     },
 ];
 
+// Footer 컴포넌트는 사이트 하단 정보와 내비게이션 링크를 제공합니다.
 export default function Footer() {
     return (
         <footer className=" mt-5 mb-5 text-black">

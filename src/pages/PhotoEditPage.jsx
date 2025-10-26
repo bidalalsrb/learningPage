@@ -1,37 +1,17 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Breadcrumb from "../components/Breadcrumb.jsx";
 import api from "../utils/api.js";
+import { normalizePhotoPost } from "../utils/photo.js";
 
 const initialForm = {
     title: "",
     content: "",
 };
 
-const normalizeImageUrl = (path) => {
-    if (!path) return "";
-    if (path.startsWith("http://") || path.startsWith("https://") || path.startsWith("/")) {
-        return path;
-    }
-    return `/${path}`;
-};
-
-const normalizePost = (post) => {
-    const images = (post.images || []).map((image, idx) => ({
-        id: image.id ?? idx,
-        url: normalizeImageUrl(image.url || image.imageUrl || image.storedPath),
-        originalFilename: image.originalFilename,
-    }));
-    return {
-        id: post.id,
-        title: post.title || "",
-        content: post.content || "",
-        images,
-    };
-};
-
+// PhotoEditPage 컴포넌트는 사진 게시글을 수정할 수 있는 관리자 전용 화면입니다.
 export default function PhotoEditPage() {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -50,29 +30,33 @@ export default function PhotoEditPage() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
-    useEffect(() => {
-        if (!isAdmin) return;
-        const fetchPhoto = async () => {
-            setLoading(true);
-            setError("");
-            try {
-                const res = await api.get(`/api/photo-posts/${id}`);
-                const normalized = normalizePost(res.data);
-                setForm({ title: normalized.title, content: normalized.content });
-                setExistingImages(normalized.images);
-            } catch (err) {
-                console.error("사진 불러오기 실패:", err);
-                const message =
-                    err.response?.status === 404
-                        ? "해당 사진 게시글을 찾을 수 없습니다."
-                        : "사진 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.";
-                setError(message);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchPhoto();
+    // fetchPhoto 함수는 편집 대상 게시글을 불러오고 폼을 초기화합니다.
+    const fetchPhoto = useCallback(async () => {
+        if (!isAdmin) {
+            return;
+        }
+        setLoading(true);
+        setError("");
+        try {
+            const res = await api.get(`/api/photo-posts/${id}`);
+            const normalized = normalizePhotoPost(res.data);
+            setForm({ title: normalized.title, content: normalized.content });
+            setExistingImages(normalized.images);
+        } catch (err) {
+            console.error("사진 불러오기 실패:", err);
+            const message =
+                err.response?.status === 404
+                    ? "해당 사진 게시글을 찾을 수 없습니다."
+                    : "사진 정보를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.";
+            setError(message);
+        } finally {
+            setLoading(false);
+        }
     }, [id, isAdmin]);
+
+    useEffect(() => {
+        fetchPhoto();
+    }, [fetchPhoto]);
 
     useEffect(
         () => () => {
@@ -81,11 +65,13 @@ export default function PhotoEditPage() {
         [previews]
     );
 
+    // handleChange 함수는 텍스트 입력 변경을 폼 상태에 반영합니다.
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm((prev) => ({ ...prev, [name]: value }));
     };
 
+    // handleFileChange 함수는 첨부 이미지를 상태에 저장하고 미리보기를 생성합니다.
     const handleFileChange = (e) => {
         const selected = Array.from(e.target.files || []);
         previews.forEach((preview) => URL.revokeObjectURL(preview.url));
@@ -103,12 +89,14 @@ export default function PhotoEditPage() {
         );
     };
 
+    // resetUploads 함수는 업로드 상태와 미리보기를 초기화합니다.
     const resetUploads = () => {
         previews.forEach((preview) => URL.revokeObjectURL(preview.url));
         setFiles([]);
         setPreviews([]);
     };
 
+    // handleSubmit 함수는 수정된 게시글 정보를 서버에 전송합니다.
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!form.title.trim() || !form.content.trim()) {
