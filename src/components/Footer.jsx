@@ -11,9 +11,11 @@ const NAV_GROUPS = [
     {
         title: "Services",
         links: [
-            { label: "교육 프로그램", to: "/education" },
-            { label: "스트레스 관리", to: "/stress" },
-            { label: "사진 아카이브", to: "/photos" },
+            { label: "대학 프로그램", to: "/education" },
+            { label: "기업 프로그램", to: "/stress" },
+            { label: "청년 프로그램", to: "/photos" },
+            { label: "HIT 프로그램", to: "/photos" },
+            { label: "사진", to: "/photos" },
         ],
     },
     {

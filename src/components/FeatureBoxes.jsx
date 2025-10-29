@@ -9,25 +9,25 @@ export default function FeatureBoxes() {
 
     const features = [
         {
-            title: "교육 프로그램",
+            title: "대학 프로그램",
             desc: "진로·취업·창업을 위한 맞춤형 교육 과정",
             icon: <FaBookOpen className="h-8 w-8 text-[var(--toss-primary)]" />,
             link: "/education",
-            badge: "Curriculum Design",
+            badge: "Education Program",
         },
         {
-            title: "스트레스 관리",
+            title: "기업 프로그램",
             desc: "기업과 조직을 위한 효율적인 교육 플랫폼",
             icon: <FaLaptopCode className="h-8 w-8 text-[var(--toss-primary)]" />,
             link: "/stress",
-            badge: "Stress",
+            badge: "Company Program",
         },
         {
-            title: "문의 / 견적",
+            title: "청년 프로그램",
             desc: "기업 및 개인 맞춤형 상담과 견적 제공",
             icon: <FaEnvelopeOpenText className="h-8 w-8 text-[var(--toss-primary)]" />,
             link: "/inquiry",
-            badge: "Support",
+            badge: "Youth Program",
         },
     ];
 

@@ -153,7 +153,7 @@ export default function InquiryPage() {
 
                                     <div className="surface-card rounded-3xl border border-[var(--toss-border)] p-8 shadow-[0_16px_40px_rgba(19,32,46,0.08)]">
                                         <h2 className="text-lg font-semibold text-[var(--toss-text-strong)]">
-                                            HRnC 클라이언트 이야기
+                                            찾아오는 길
                                         </h2>
                                         <div className="mt-4 grid grid-cols-2 gap-4">
                                             <div className="flex flex-col items-center gap-2 rounded-2xl border border-[var(--toss-border)] bg-[var(--toss-primary-soft)] px-4 py-6 text-center">

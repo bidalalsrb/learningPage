@@ -36,7 +36,7 @@ ESG는 단순한 경영 전략이 아닌, 모든 조직과 개인이 함께 만�
 
 감사합니다."/>
 
-                <section className="px-6 pb-16">
+                {/*<section className="px-6 pb-16">
                     <div className="toss-container grid gap-8 md:grid-cols-2">
                         <article className="surface-card rounded-3xl border border-[var(--toss-border)] p-8">
                             <h2 className="text-xl font-semibold text-[var(--toss-text-strong)]">
@@ -58,7 +58,15 @@ ESG는 단순한 경영 전략이 아닌, 모든 조직과 개인이 함께 만�
                             </ul>
                         </article>
                     </div>
+                </section>*/}
+                <section className="px-6 pb-16">
+                    <div className="toss-container">
+                        <div className="surface-card rounded-3xl border border-[var(--toss-border)] p-10 text-center md:text-left">
+                           <img src="/org.png" alt='조직도'/>
+                        </div>
+                    </div>
                 </section>
+
             </main>
 
             <Footer />

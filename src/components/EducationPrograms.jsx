@@ -10,9 +10,9 @@ const TARGET_LABEL = {
 };
 
 const CATEGORY_TYPE_LABEL = {
-    CAREER: "진로",
-    JOB: "취업",
-    STARTUP: "창업",
+    CAREER: "고맞고 프로그램",
+    JOB: "대학 (저학년) 프로그램",
+    STARTUP: "대학 (고학년) 프로그램",
 };
 
 const CATEGORY_ORDER = [

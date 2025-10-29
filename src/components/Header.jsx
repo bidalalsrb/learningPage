@@ -22,9 +22,9 @@ export default function Header() {
                     className="flex items-center gap-2 rounded-full border border-transparent px-3 py-1 transition cursor-pointer"
                 >
                     <img
-                        src="/iconimg.png"
+                        src="/logo_new.png"
                         alt="HRnC 로고"
-                        className="h-10 w-auto"
+                        // className="h-10 w-auto"
                     />
 
                 </button>
@@ -34,10 +34,16 @@ export default function Header() {
                         회사 소개
                     </Link>
                     <Link to="/education" className="transition hover:text-[var(--toss-primary)]">
-                        교육 프로그램
+                        대학 프로그램
+                    </Link>
+                    <Link to="/education" className="transition hover:text-[var(--toss-primary)]">
+                        기업 프로그램
                     </Link>
                     <Link to="/stress" className="transition hover:text-[var(--toss-primary)]">
-                        스트레스 관리
+                        청년 프로그램
+                    </Link>
+                    <Link to="/stress" className="transition hover:text-[var(--toss-primary)]">
+                        HIT 프로그램
                     </Link>
                     <Link to="/photos" className="transition hover:text-[var(--toss-primary)]">
                         사진
