@@ -11,10 +11,10 @@ const NAV_GROUPS = [
     {
         title: "Services",
         links: [
-            { label: "대학 프로그램", to: "/education" },
-            { label: "기업 프로그램", to: "/stress" },
-            { label: "청년 프로그램", to: "/photos" },
-            { label: "HIT 프로그램", to: "/photos" },
+            { label: "대학 프로그램", to: "/universty-program" },
+            { label: "기업 프로그램", to: "/compnay-program" },
+            { label: "청년 프로그램", to: "/photos1" },
+            { label: "HIT 프로그램", to: "/photos2" },
             { label: "사진", to: "/photos" },
         ],
     },
@@ -41,8 +41,8 @@ export default function Footer() {
 
                     </div>
                     <div className="space-y-1.5 text-xs">
-                        <p>사업자등록번호 123-45-67890 · 대표 한진아</p>
-                        <p>서울특별시 어딘가 123, 한국ESG리더십교육협회</p>
+                        <p>사업자등록번호 222-82-76732 · 대표 한진아</p>
+                        <p>강원특별자치도 인제군 북면 금강로 29, A동 1호 63(더라운드 소호사무실)</p>
                         <p>info@hrnc.co.kr</p>
                     </div>
                 </div>
@@ -82,6 +82,7 @@ export default function Footer() {
                         </a>
                     </div>
                 </div>
+
             </div>
         </footer>
     );

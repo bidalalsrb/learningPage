@@ -29,7 +29,7 @@ export default function InquiryCreatePage() {
                 ]}
             />
 
-            <main className="flex-1 px-6 py-12">
+            <main className="flex-1 px-6 py-8">
                 <div className="toss-container max-w-3xl mx-auto space-y-8">
                     <div className="text-center md:text-left">
                         <span className="toss-tag uppercase">Contact</span>

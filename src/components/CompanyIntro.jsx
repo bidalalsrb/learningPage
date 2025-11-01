@@ -7,7 +7,7 @@ export default function CompanyIntro({
                                           eyebrow = "HRnC Curriculum",
                                       }) {
     return (
-        <section className="px-6 py-16">
+        <section className="px-6 py-8">
             <div className="toss-container">
                 <div
                     className="relative overflow-hidden rounded-[32px] border border-[var(--toss-border)] bg-gradient-to-br from-white via-white to-[rgba(0,100,255,0.08)] px-10 py-16 text-center shadow-[0_18px_40px_rgba(19,32,46,0.08)] md:text-left">

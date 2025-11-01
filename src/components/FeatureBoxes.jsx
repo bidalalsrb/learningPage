@@ -12,14 +12,14 @@ export default function FeatureBoxes() {
             title: "대학 프로그램",
             desc: "진로·취업·창업을 위한 맞춤형 교육 과정",
             icon: <FaBookOpen className="h-8 w-8 text-[var(--toss-primary)]" />,
-            link: "/education",
+            link: "/universty-program",
             badge: "Education Program",
         },
         {
             title: "기업 프로그램",
             desc: "기업과 조직을 위한 효율적인 교육 플랫폼",
             icon: <FaLaptopCode className="h-8 w-8 text-[var(--toss-primary)]" />,
-            link: "/stress",
+            link: "/compnay-program",
             badge: "Company Program",
         },
         {

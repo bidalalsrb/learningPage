@@ -9,49 +9,95 @@ const TARGET_LABEL = {
     COMPANY: "기업 프로그램",
 };
 
-const CATEGORY_TYPE_LABEL = {
-    CAREER: "고맞고 프로그램",
-    JOB: "대학 (저학년) 프로그램",
-    STARTUP: "대학 (고학년) 프로그램",
+const CATEGORY_DEFINITIONS = {
+    UNIVERSITY: [
+        {
+            type: "GOMATGO",
+            title: "고맞고 프로그램",
+            coverLabel: "고맞고 프로그램 대표 이미지",
+        },
+        {
+            type: "UNIVERSITY_LOWER",
+            title: "대학(저학년)프로그램",
+            coverLabel: "대학(저학년)프로그램 대표 이미지",
+        },
+        {
+            type: "UNIVERSITY_UPPER",
+            title: "대학(고학년)프로그램",
+            coverLabel: "대학(고학년)프로그램 대표 이미지",
+        },
+        {
+            type: "GRAD_SPECIAL",
+            title: "창업",
+            coverLabel: "창업 대표 이미지",
+        },
+        {
+            type: "CAMP",
+            title: "캠프",
+            coverLabel: "캠프 대표 이미지",
+        },
+    ],
+    COMPANY: [
+        {
+            type: "EMPLOYMENT",
+            title: "조직활성화",
+            coverLabel: "조직활성화 대표 이미지",
+        },
+        {
+            type: "ENTREPRENEURSHIP",
+            title: "ESG/AI",
+            coverLabel: "ESG/AI 대표 이미지",
+        },
+        {
+            type: "CAREER_PATH",
+            title: "법정의무교육",
+            coverLabel: "법정의무교육 대표 이미지",
+        },
+    ],
 };
 
-const CATEGORY_ORDER = [
-    { target: "UNIVERSITY", type: "CAREER" },
-    { target: "UNIVERSITY", type: "JOB" },
-    { target: "UNIVERSITY", type: "STARTUP" },
-    { target: "COMPANY", type: "CAREER" },
-    { target: "COMPANY", type: "JOB" },
-    { target: "COMPANY", type: "STARTUP" },
-];
+const CATEGORY_PRESET = Object.entries(CATEGORY_DEFINITIONS).flatMap(
+    ([target, definitions]) =>
+        definitions.map((definition) => ({
+            ...definition,
+            target,
+        }))
+);
 
-const CATEGORY_COVER_LABEL = {
-    CAREER: "진로 프로그램 대표 이미지",
-    JOB: "취업 프로그램 대표 이미지",
-    STARTUP: "창업 프로그램 대표 이미지",
-};
+const CATEGORY_TYPE_LABEL = CATEGORY_PRESET.reduce(
+    (acc, { type, title }) => {
+        acc[type] = title;
+        return acc;
+    },
+    {
+        CAREER: "고맞고 프로그램",
+        JOB: "대학(저학년)프로그램",
+        STARTUP: "대학(고학년)프로그램",
+    }
+);
+
+const CATEGORY_ORDER = CATEGORY_PRESET.map(({ target, type }) => `${target}-${type}`);
 
 // buildEmptyCategories 함수는 기본 카테고리 구조를 빈 리스트로 초기화합니다.
 const buildEmptyCategories = () =>
-    CATEGORY_ORDER.map(({ target, type }) => ({
-        title: CATEGORY_TYPE_LABEL[type] ?? type,
+    CATEGORY_PRESET.map(({ target, type, title, coverLabel }) => ({
+        title,
         type,
         target,
         items: [],
+        coverLabel,
     }));
 
 // buildCategoriesFromPrograms 함수는 프로그램 목록을 카테고리별로 그룹화합니다.
 const buildCategoriesFromPrograms = (programs, resolveImageUrl) => {
+    const baseCategories = buildEmptyCategories();
     const categoryMap = new Map(
-        CATEGORY_ORDER.map(({ target, type }) => [
-            `${target}-${type}`,
-            {
-                title: CATEGORY_TYPE_LABEL[type] ?? type,
-                type,
-                target,
-                items: [],
-            },
+        baseCategories.map((category) => [
+            `${category.target}-${category.type}`,
+            { ...category, items: [] },
         ])
     );
+    const dynamicKeys = new Set();
 
     programs.forEach((program) => {
         if (!program || !program.type || !program.target) {
@@ -59,12 +105,15 @@ const buildCategoriesFromPrograms = (programs, resolveImageUrl) => {
         }
         const key = `${program.target}-${program.type}`;
         if (!categoryMap.has(key)) {
+            const fallbackTitle = CATEGORY_TYPE_LABEL[program.type] ?? program.type;
             categoryMap.set(key, {
-                title: CATEGORY_TYPE_LABEL[program.type] ?? program.type,
+                title: fallbackTitle,
                 type: program.type,
                 target: program.target,
                 items: [],
+                coverLabel: `${fallbackTitle} 대표 이미지`,
             });
+            dynamicKeys.add(key);
         }
         const rawImages = Array.isArray(program.imageUrls)
             ? program.imageUrls.filter(Boolean)
@@ -84,13 +133,22 @@ const buildCategoriesFromPrograms = (programs, resolveImageUrl) => {
             desc: program.description,
             images,
         };
-        categoryMap.get(key).items.push(item);
+        const category = categoryMap.get(key);
+        if (category) {
+            category.items.push(item);
+        }
     });
 
-    return CATEGORY_ORDER.map(({ target, type }) => categoryMap.get(`${target}-${type}`));
+    const orderedCategories = CATEGORY_ORDER.map((key) => categoryMap.get(key)).filter(Boolean);
+    const additionalCategories = Array.from(dynamicKeys)
+        .filter((key) => !CATEGORY_ORDER.includes(key))
+        .map((key) => categoryMap.get(key))
+        .filter(Boolean);
+
+    return [...orderedCategories, ...additionalCategories];
 };
 
-export default function EducationPrograms() {
+export default function EducationPrograms({ targetFilter = null }) {
     const [selectedItem, setSelectedItem] = useState(null);
     const [editItem, setEditItem] = useState(null);
     const [addItemModal, setAddItemModal] = useState(false);
@@ -249,7 +307,8 @@ export default function EducationPrograms() {
     // fetchPrograms 함수는 교육 프로그램 목록을 불러와 카테고리 상태로 변환합니다.
     const fetchPrograms = useCallback(async () => {
         try {
-            const res = await api.get("/api/edu-programs");
+            const params = targetFilter ? { target: targetFilter } : {};
+            const res = await api.get("/api/edu-programs", { params });
             const list = Array.isArray(res.data) ? res.data : [];
             const built = buildCategoriesFromPrograms(list, resolveImageUrl);
             setCategories(built);
@@ -257,12 +316,13 @@ export default function EducationPrograms() {
             console.error("프로그램 불러오기 실패:", err);
             setCategories(buildEmptyCategories());
         }
-    }, [resolveImageUrl]);
+    }, [resolveImageUrl, targetFilter]);
 
     // fetchCoverImages 함수는 카테고리별 대표 이미지를 불러옵니다.
     const fetchCoverImages = useCallback(async () => {
         try {
-            const res = await api.get("/api/edu-programs/covers");
+            const params = targetFilter ? { target: targetFilter } : {};
+            const res = await api.get("/api/edu-programs/covers", { params });
             const mapped = {};
             (Array.isArray(res.data) ? res.data : []).forEach((cover) => {
                 if (!cover?.target || !cover?.type) {
@@ -281,7 +341,7 @@ export default function EducationPrograms() {
         } catch (err) {
             console.error("대표 이미지 불러오기 실패:", err);
         }
-    }, [resolveCoverPreview]);
+    }, [resolveCoverPreview, targetFilter]);
 
     useEffect(() => {
         fetchPrograms();
@@ -353,8 +413,16 @@ export default function EducationPrograms() {
         }
     };
 
+    const filteredCategories = useMemo(
+        () =>
+            targetFilter
+                ? categories.filter((cat) => cat.target === targetFilter)
+                : categories,
+        [categories, targetFilter]
+    );
+
     const groupedCategories = useMemo(() => {
-        return categories.reduce(
+        return filteredCategories.reduce(
             (acc, cat) => {
                 const key = cat.target || "UNIVERSITY";
                 acc[key] = acc[key] ? [...acc[key], cat] : [cat];
@@ -362,11 +430,19 @@ export default function EducationPrograms() {
             },
             {}
         );
-    }, [categories]);
+    }, [filteredCategories]);
+
+    const targetEntries = useMemo(() => {
+        const entries = Object.entries(TARGET_LABEL);
+        if (!targetFilter) {
+            return entries;
+        }
+        return entries.filter(([target]) => target === targetFilter);
+    }, [targetFilter]);
 
     return (
         <>
-            {Object.entries(TARGET_LABEL).map(([target, label]) => {
+            {targetEntries.map(([target, label]) => {
                 const list = groupedCategories[target] || [];
 
                 return (
@@ -430,7 +506,7 @@ export default function EducationPrograms() {
                                                     ) : (
                                                         <div className="absolute inset-0 grid place-items-center">
                                                             <span className="rounded-full border border-[var(--toss-border)] bg-white/85 px-4 py-1 text-xs font-medium text-[var(--toss-text-medium)]">
-                                                                {CATEGORY_COVER_LABEL[cat.type] || "대표 이미지 영역"}
+                                                                {cat.coverLabel || "대표 이미지 영역"}
                                                             </span>
                                                         </div>
                                                     )}

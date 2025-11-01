@@ -141,7 +141,7 @@ export default function InquiryPage() {
                                             실시간으로 담당자와 상담하고 싶다면 카카오톡 채널을 이용해 주세요.
                                         </p>
                                         <a
-                                            href="https://pf.kakao.com/_YOUR_CHANNEL_"
+                                            href="http://pf.kakao.com/_xjxomSn"
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#FEE500] px-4 py-2 text-sm font-semibold text-[#191600] transition hover:brightness-95"
@@ -155,24 +155,20 @@ export default function InquiryPage() {
                                         <h2 className="text-lg font-semibold text-[var(--toss-text-strong)]">
                                             찾아오는 길
                                         </h2>
-                                        <div className="mt-4 grid grid-cols-2 gap-4">
-                                            <div className="flex flex-col items-center gap-2 rounded-2xl border border-[var(--toss-border)] bg-[var(--toss-primary-soft)] px-4 py-6 text-center">
-                                                <span className="text-sm font-semibold text-[var(--toss-primary)]">
-                                                    이미지1
-                                                </span>
-                                                <p className="text-xs text-[var(--toss-text-medium)]">
-                                                    데이터 기반 커리큘럼으로 교육 만족도가 35% 상승한 대학 사례.
-                                                </p>
-                                            </div>
-                                            <div className="flex flex-col items-center gap-2 rounded-2xl border border-[var(--toss-border)] bg-[var(--toss-primary-soft)] px-4 py-6 text-center">
-                                                <span className="text-sm font-semibold text-[var(--toss-primary)]">
-                                                    이미지2
-                                                </span>
-                                                <p className="text-xs text-[var(--toss-text-medium)]">
-                                                    조직문화 개선 스토리를 카드뉴스로 확인하세요.
-                                                </p>
-                                            </div>
+
+                                        <p className=" text-sm text-[var(--toss-text-medium)]">주 소 : 강원특별자치도 인제군 북면 금강로29, A동 63 </p>
+
+                                        <div className="mt-4 w-full overflow-hidden rounded-2xl border border-[var(--toss-border)]">
+                                            <iframe
+                                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3138.7537058870903!2d128.2037481765398!3d38.12266397189967!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x356276f5e65919e7%3A0xb488c8627b975da3!2z642U65287Jq065Oc!5e0!3m2!1sko!2skr!4v1761981225628!5m2!1sko!2skr"
+                                                style={{ border: 0, width: "100%", height: "320px" }}
+                                                allowFullScreen=""
+                                                loading="lazy"
+                                                referrerPolicy="no-referrer-when-downgrade"
+                                                title="회사 위치 지도"
+                                            ></iframe>
                                         </div>
+
                                     </div>
                                 </div>
 
